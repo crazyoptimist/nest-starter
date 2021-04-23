@@ -60,7 +60,7 @@ and read all environment variables from `.env` file, which is created automatica
 ## Swagger
 
 RESTful APIs you can describe with already integrated Swagger.
-To see all available endpoints visit http://localhost/api/docs
+To see all available endpoints visit `BASE_URL/api/docs`.
 
 ## Authentication - JWT
 
