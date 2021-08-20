@@ -13,4 +13,4 @@ RUN set -x && yarn run prestart:prod
 
 EXPOSE 3000
 
-CMD [ "node", "dist/main.js" ]
+CMD [ "node", "-r", "./tsconfig-paths-bootstrap.js" ,"dist/main.js" ]

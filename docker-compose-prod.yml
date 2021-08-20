@@ -1,15 +1,14 @@
 version: "3"
 services:
   nest:
-    build: .
-    container_name: nest
-    depends_on:
-      - db
+    build:
+      context: .
+      dockerfile: Dockerfile-prod
+    image: nest_prod
+    container_name: nest_prod
     ports:
       - 3000:3000
-    volumes:
-      - ./src:/app/src
-      - .env:/app/.env
+    restart: unless-stopped
 
   db:
     image: mariadb:10
