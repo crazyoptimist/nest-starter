@@ -3,7 +3,7 @@ services:
   nest:
     build:
       context: .
-      dockerfile: Dockerfile-prod
+      dockerfile: Dockerfile
     image: nest_prod
     container_name: nest_prod
     ports:
