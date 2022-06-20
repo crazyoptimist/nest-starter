@@ -1,9 +1,11 @@
 import { Injectable, UnauthorizedException } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
-import { Hash } from '../../utils/Hash';
-import { ConfigService } from './../config';
-import { User, UsersService } from './../user';
-import { LoginPayload } from './login.payload';
+
+import { Hash } from '../../utils/hash.util';
+import { ConfigService } from 'modules/config/config.service';
+import { UsersService } from 'modules/user/user.service';
+import { User } from 'modules/user/user.entity';
+import { SigninDto } from './dto/signin.dto';
 
 @Injectable()
 export class AuthService {
@@ -21,9 +23,9 @@ export class AuthService {
     };
   }
 
-  async validateUser(payload: LoginPayload): Promise<any> {
-    const user = await this.userService.getByEmail(payload.email);
-    if (!user || !Hash.compare(payload.password, user.password)) {
+  async validateUser(signinDto: SigninDto): Promise<any> {
+    const user = await this.userService.getByEmail(signinDto.email);
+    if (!user || !Hash.compare(signinDto.password, user.password)) {
       throw new UnauthorizedException('Invalid credentials!');
     }
     return user;

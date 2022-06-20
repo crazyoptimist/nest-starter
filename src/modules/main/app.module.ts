@@ -1,10 +1,12 @@
 import { Module } from '@nestjs/common';
 import { TypeOrmModule, TypeOrmModuleAsyncOptions } from '@nestjs/typeorm';
+
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
-import { ConfigModule, ConfigService } from 'modules/config';
-import { AuthModule } from 'modules/auth';
-import { CommonModule } from 'modules/common';
+import { ConfigModule } from 'modules/config/config.module';
+import { ConfigService } from 'modules/config/config.service';
+import { AuthModule } from 'modules/auth/auth.module';
+import { CommonModule } from 'modules/common/common.module';
 
 @Module({
   imports: [

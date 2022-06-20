@@ -5,12 +5,22 @@ import {
   CreateDateColumn,
   UpdateDateColumn,
 } from 'typeorm';
-import { PasswordTransformer } from './password.transformer';
+import { Exclude } from 'class-transformer';
+
+import { PasswordTransformer } from 'modules/common/transformer/password.transformer';
 
 @Entity({
   name: 'users',
 })
 export class User {
+  @CreateDateColumn()
+  @Exclude()
+  created_at: Date;
+
+  @UpdateDateColumn()
+  @Exclude()
+  updated_at: Date;
+
   @PrimaryGeneratedColumn()
   id: number;
 
@@ -28,17 +38,6 @@ export class User {
     length: 255,
     transformer: new PasswordTransformer(),
   })
-  password: string;
-
-  toJSON() {
-    const { password, ...self } = this;
-    return self;
-  }
-}
-
-export class UserFillableFields {
-  email: string;
-  firstName: string;
-  lastName: string;
+  @Exclude()
   password: string;
 }

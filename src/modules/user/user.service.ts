@@ -2,7 +2,8 @@ import { Injectable, NotAcceptableException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 
-import { User, UserFillableFields } from './user.entity';
+import { User } from './user.entity';
+import { SignupDto } from 'modules/auth/dto/signup.dto';
 
 @Injectable()
 export class UsersService {
@@ -23,15 +24,17 @@ export class UsersService {
       .getOne();
   }
 
-  async create(payload: UserFillableFields) {
-    const user = await this.getByEmail(payload.email);
+  async create(signupDto: SignupDto) {
+    const user = await this.getByEmail(signupDto.email);
 
     if (user) {
       throw new NotAcceptableException(
-        'User with provided email already created.',
+        'User with provided email already exists.',
       );
     }
 
-    return await this.userRepository.save(this.userRepository.create(payload));
+    return await this.userRepository.save(
+      this.userRepository.create(signupDto),
+    );
   }
 }
