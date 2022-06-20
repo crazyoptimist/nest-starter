@@ -1,17 +1,13 @@
-import { Get, Controller, UseGuards } from '@nestjs/common';
-import { AuthGuard } from '@nestjs/passport';
-import { ApiBearerAuth } from '@nestjs/swagger';
+import { Get, Controller, HttpStatus } from '@nestjs/common';
+import { ApiTags } from '@nestjs/swagger';
 
-import { AppService } from './app.service';
-
-@ApiBearerAuth()
 @Controller()
+@ApiTags('healthcheck')
 export class AppController {
-  constructor(private readonly appService: AppService) {}
+  constructor() {}
 
   @Get()
-  @UseGuards(AuthGuard('jwt'))
-  root(): string {
-    return this.appService.root();
+  root() {
+    return HttpStatus.OK;
   }
 }
