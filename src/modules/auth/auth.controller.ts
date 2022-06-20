@@ -8,8 +8,10 @@ import {
 } from '@nestjs/common';
 import { ApiResponse, ApiTags, ApiBearerAuth } from '@nestjs/swagger';
 import { AuthGuard } from '@nestjs/passport';
-import { AuthService, LoginPayload, RegisterPayload } from './';
-import { UsersService } from './../user';
+import { AuthService } from './auth.service';
+import { SigninDto } from './dto/signin.dto';
+import { SignupDto } from './dto/signup.dto';
+import { UsersService } from 'modules/user/user.service';
 
 @Controller('api/auth')
 @ApiTags('authentication')
@@ -19,21 +21,21 @@ export class AuthController {
     private readonly userService: UsersService,
   ) {}
 
-  @Post('login')
+  @Post('signin')
   @ApiResponse({ status: 201, description: 'Successful Login' })
   @ApiResponse({ status: 400, description: 'Bad Request' })
   @ApiResponse({ status: 401, description: 'Unauthorized' })
-  async login(@Body() payload: LoginPayload): Promise<any> {
-    const user = await this.authService.validateUser(payload);
+  async signin(@Body() signinDto: SigninDto): Promise<any> {
+    const user = await this.authService.validateUser(signinDto);
     return await this.authService.createToken(user);
   }
 
-  @Post('register')
+  @Post('signup')
   @ApiResponse({ status: 201, description: 'Successful Registration' })
   @ApiResponse({ status: 400, description: 'Bad Request' })
   @ApiResponse({ status: 401, description: 'Unauthorized' })
-  async register(@Body() payload: RegisterPayload): Promise<any> {
-    const user = await this.userService.create(payload);
+  async signup(@Body() signupDto: SignupDto): Promise<any> {
+    const user = await this.userService.create(signupDto);
     return await this.authService.createToken(user);
   }
 

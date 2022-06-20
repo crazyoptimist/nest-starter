@@ -1,12 +1,12 @@
 import { ValueTransformer } from 'typeorm';
-import { Hash } from '../../utils/Hash';
+import { Hash } from '../../../utils/hash.util';
 
 export class PasswordTransformer implements ValueTransformer {
-  to(value) {
+  to(value: string) {
     return Hash.make(value);
   }
 
-  from(value) {
+  from(value: string) {
     return value;
   }
 }
