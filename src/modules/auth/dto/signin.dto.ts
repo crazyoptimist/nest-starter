@@ -7,6 +7,7 @@ export class SigninDto {
   })
   @IsEmail()
   email: string;
+
   @ApiProperty({
     required: true,
   })
