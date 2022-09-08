@@ -6,6 +6,8 @@ import { AppModule } from 'modules/main/app.module';
 import { setupSwagger } from './swagger';
 import { TrimStringsPipe } from 'modules/common/transformer/trim-strings.pipe';
 
+const APP_PORT = 3000;
+
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
   setupSwagger(app);
@@ -16,7 +18,7 @@ async function bootstrap() {
   );
   app.useGlobalInterceptors(new ClassSerializerInterceptor(app.get(Reflector)));
   useContainer(app.select(AppModule), { fallbackOnErrors: true });
-  await app.listen(3000);
+  await app.listen(APP_PORT);
 }
 
 bootstrap();
