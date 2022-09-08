@@ -1,8 +1,8 @@
 {
   "name": "nest-starter",
   "version": "1.0.0",
-  "description": "Nest.js Starter For Minimalists",
-  "author": "CrazyOptimist<hey@crazyoptimist.net>",
+  "description": "Nest.js boilerplate for minimalists",
+  "author": "crazyoptimist<me@crazyoptimist.net>",
   "license": "MIT",
   "scripts": {
     "format": "prettier --write \"src/**/*.ts\"",
@@ -16,10 +16,10 @@
     "test:watch": "jest --watch",
     "test:cov": "jest --coverage",
     "test:e2e": "jest --config ./test/jest-e2e.json",
-    "ts-typeorm": "ts-node -r tsconfig-paths/register ./node_modules/.bin/typeorm",
-    "migration:generate": "yarn ts-typeorm migration:generate -d src/migrations",
-    "migration:run": "yarn ts-typeorm migration:run",
-    "migration:revert": "yarn ts-typeorm migration:revert",
+    "typeorm": "ts-node ./node_modules/typeorm/cli",
+    "migration:generate": "yarn typeorm migration:generate -d typeorm.config.ts",
+    "migration:run": "yarn typeorm migration:run -d typeorm.config.ts",
+    "migration:revert": "yarn typeorm migration:revert -d typeorm.config.ts",
     "prepare": "husky install"
   },
   "dependencies": {
