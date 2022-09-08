@@ -3,8 +3,7 @@ import { TypeOrmModule, TypeOrmModuleAsyncOptions } from '@nestjs/typeorm';
 
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
-import { ConfigModule } from 'modules/config/config.module';
-import { ConfigService } from 'modules/config/config.service';
+import { ConfigModule, ConfigService } from '@nestjs/config';
 import { AuthModule } from 'modules/auth/auth.module';
 import { CommonModule } from 'modules/common/common.module';
 
@@ -26,7 +25,10 @@ import { CommonModule } from 'modules/common/common.module';
         } as TypeOrmModuleAsyncOptions;
       },
     }),
-    ConfigModule,
+    ConfigModule.forRoot({
+      envFilePath: '.env',
+      isGlobal: true,
+    }),
     AuthModule,
     CommonModule,
   ],

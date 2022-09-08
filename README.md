@@ -4,9 +4,9 @@
 
 ### Without Docker
 
-- Create .env file `cp .env.example .env` and replace existing env variables
-- Install dependencies `yarn`
-- Start the app `yarn start` (app will be exposed through the port 3000)
+- Create dotenv file by running `cp .env.example .env` and configure it with proper values
+- Install dependencies by running `yarn`
+- Start the app `yarn start:dev` (it will serve at port 3000)
 
 ### Using Docker
 
@@ -26,6 +26,7 @@ If you don't work on a production-ready project you can always change `DB_SYNC` 
 ```bash
 docker exec -it nest yarn migration:create -n AddAgeColumnToUserModel
 ```
+
 Migration files are placed under `src/migrations`.
 
 ### Run Migrations
@@ -56,7 +57,7 @@ docker exec -it nest yarn test:cov
 ## Environment Configuration
 
 Integrated Configuration Module so you can just inject `ConfigService`
-and read all environment variables from `.env` file, which is created automatically by the init script from `.env.example`.
+and read all environment variables from dotenv file.
 
 ## Swagger
 
