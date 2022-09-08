@@ -30,6 +30,9 @@ export class User {
   @Column({ length: 255 })
   lastName: string;
 
+  @Column({ nullable: true })
+  about: string;
+
   @Column({ length: 255 })
   email: string;
 

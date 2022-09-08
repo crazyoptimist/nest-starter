@@ -21,21 +21,27 @@ If you don't work on a production-ready project you can always change `DB_SYNC` 
 
 **`synchronize: true` shouldn't be used in production - otherwise, you can lose production data.**
 
-### Create Migration
+### Generate a Migration
 
 ```bash
-docker exec -it nest yarn migration:create -n AddAgeColumnToUserModel
+npm run migration:generate --name=AddAgeColumnToUser
+```
+
+or with docker:
+
+```bash
+docker exec -it nest npm run migration:generate --name=AddAgeColumnToUser
 ```
 
 Migration files are placed under `src/migrations`.
 
-### Run Migrations
+### Run Pending Migrations
 
 ```bash
 docker exec -it nest yarn migration:run
 ```
 
-### Revert Migrations
+### Revert a Migration
 
 ```bash
 docker exec -it nest yarn migration:revert
