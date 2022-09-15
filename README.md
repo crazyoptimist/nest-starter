@@ -1,12 +1,15 @@
-# Nest.js Starter
+# NestJS Starter
 
-## Start Guide
+[![CI for nest-starter](https://github.com/crazyoptimist/nest-starter/actions/workflows/build.yml/badge.svg)](https://github.com/crazyoptimist/nest-starter/actions/workflows/build.yml)
+
+## How to start
 
 ### Without Docker
 
 - Create dotenv file by running `cp .env.example .env` and configure it with proper values
-- Install dependencies by running `yarn`
-- Start the app `yarn start:dev` (it will serve at port 3000)
+- Install dependencies by running `yarn install`
+- Run it in dev mode by `yarn start:dev` (it will serve at port 3000)
+- Or you can use webpack hot module reload `yarn start`
 
 ### Using Docker
 
