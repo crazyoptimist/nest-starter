@@ -6,6 +6,8 @@ import { AppModule } from 'modules/main/app.module';
 import { setupSwagger } from './swagger';
 import { TrimStringsPipe } from 'modules/common/transformer/trim-strings.pipe';
 
+declare const module: any;
+
 const APP_PORT = 3000;
 
 async function bootstrap() {
@@ -19,6 +21,11 @@ async function bootstrap() {
   app.useGlobalInterceptors(new ClassSerializerInterceptor(app.get(Reflector)));
   useContainer(app.select(AppModule), { fallbackOnErrors: true });
   await app.listen(APP_PORT);
+
+  if (module.hot) {
+    module.hot.accept();
+    module.hot.dispose(() => app.close());
+  }
 }
 
 bootstrap();

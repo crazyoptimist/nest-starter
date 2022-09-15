@@ -7,6 +7,9 @@ import { ConfigModule, ConfigService } from '@nestjs/config';
 import { AuthModule } from 'modules/auth/auth.module';
 import { CommonModule } from 'modules/common/common.module';
 
+// TypeORM Entities
+import { User } from 'modules/user/user.entity';
+
 @Module({
   imports: [
     TypeOrmModule.forRootAsync({
@@ -20,7 +23,7 @@ import { CommonModule } from 'modules/common/common.module';
           username: configService.get('DB_USERNAME'),
           password: configService.get('DB_PASSWORD'),
           database: configService.get('DB_DATABASE'),
-          entities: [__dirname + './../**/**.entity{.ts,.js}'],
+          entities: [User],
           synchronize: configService.get('DB_SYNC') === 'true',
         } as TypeOrmModuleAsyncOptions;
       },
