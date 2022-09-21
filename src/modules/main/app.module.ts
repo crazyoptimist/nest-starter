@@ -25,6 +25,7 @@ import { User } from 'modules/user/user.entity';
           database: configService.get('DB_DATABASE'),
           entities: [User],
           synchronize: configService.get('DB_SYNC') === 'true',
+          keepConnectionAlive: true,
         } as TypeOrmModuleAsyncOptions;
       },
     }),
