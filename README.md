@@ -1,6 +1,4 @@
-# NestJS Starter
-
-[![CI for nest-starter](https://github.com/crazyoptimist/nest-starter/actions/workflows/build.yml/badge.svg)](https://github.com/crazyoptimist/nest-starter/actions/workflows/build.yml)
+# Carma-Tech API, built based on [nest-starter](https://github.com/crazyoptimist/nest-starter)
 
 ## How to start
 
