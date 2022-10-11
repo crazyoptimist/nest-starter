@@ -3,6 +3,8 @@ node_modules/
 
 # IDE
 /.vscode
+*.sublime-project
+*.sublime-workspace
 
 # misc
 .DS_Store
