@@ -8,11 +8,11 @@ import {
 } from '@nestjs/common';
 import { ApiResponse, ApiTags, ApiBearerAuth } from '@nestjs/swagger';
 import { AuthGuard } from '@nestjs/passport';
-import { AuthService } from './auth.service';
-import { SigninDto } from './dto/signin.dto';
-import { SignupDto } from './dto/signup.dto';
-import { UsersService } from 'modules/user/user.service';
-import { IRequest } from 'modules/user/user.interface';
+import { AuthService } from '@app/modules/auth/auth.service';
+import { SigninDto } from '@app/modules/auth/dto/signin.dto';
+import { SignupDto } from '@app/modules/auth/dto/signup.dto';
+import { UsersService } from '@app/modules/user/user.service';
+import { IRequest } from '@app/modules/user/user.interface';
 
 @Controller('api/auth')
 @ApiTags('authentication')

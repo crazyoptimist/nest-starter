@@ -1,14 +1,14 @@
 import { Module } from '@nestjs/common';
 import { TypeOrmModule, TypeOrmModuleAsyncOptions } from '@nestjs/typeorm';
 
-import { AppController } from './app.controller';
-import { AppService } from './app.service';
+import { AppController } from '@app/modules/main/app.controller';
+import { AppService } from '@app/modules/main/app.service';
 import { ConfigModule, ConfigService } from '@nestjs/config';
-import { AuthModule } from 'modules/auth/auth.module';
-import { CommonModule } from 'modules/common/common.module';
+import { AuthModule } from '@app/modules/auth/auth.module';
+import { CommonModule } from '@app/modules/common/common.module';
 
 // TypeORM Entities
-import { User } from 'modules/user/user.entity';
+import { User } from '@app/modules/user/user.entity';
 
 @Module({
   imports: [

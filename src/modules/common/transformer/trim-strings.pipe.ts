@@ -1,4 +1,4 @@
-import { AbstractTransformPipe } from './abstract-transform.pipe';
+import { AbstractTransformPipe } from '@app/modules/common/transformer/abstract-transform.pipe';
 
 export class TrimStringsPipe extends AbstractTransformPipe {
   except() {

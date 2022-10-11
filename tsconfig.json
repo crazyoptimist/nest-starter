@@ -2,20 +2,23 @@
   "compilerOptions": {
     "module": "commonjs",
     "declaration": true,
-    "noImplicitAny": false,
     "removeComments": true,
-    "noLib": false,
-    "allowSyntheticDefaultImports": true,
     "emitDecoratorMetadata": true,
     "experimentalDecorators": true,
-    "target": "es6",
+    "allowSyntheticDefaultImports": true,
+    "target": "es2017",
     "sourceMap": true,
     "outDir": "./dist",
-    "baseUrl": "./src",
+    "baseUrl": "./",
+    "incremental": true,
+    "skipLibCheck": true,
+    "strictNullChecks": false,
+    "noImplicitAny": false,
+    "strictBindCallApply": false,
+    "forceConsistentCasingInFileNames": false,
+    "noFallthroughCasesInSwitch": false,
     "paths": {
-      "modules/*": ["modules/*"]
+      "@app/*": ["./src/*"]
     }
-  },
-  "include": ["src/**/*"],
-  "exclude": ["node_modules", "**/*.spec.ts"]
+  }
 }

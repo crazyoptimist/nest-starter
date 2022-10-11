@@ -2,8 +2,8 @@ import { Test, TestingModule } from '@nestjs/testing';
 import { HttpStatus } from '@nestjs/common';
 import { ConfigModule } from '@nestjs/config';
 
-import { AppController } from './app.controller';
-import { AppService } from './app.service';
+import { AppController } from '@app/modules/main/app.controller';
+import { AppService } from '@app/modules/main/app.service';
 
 describe('AppController', () => {
   let app: TestingModule;
