@@ -11,8 +11,8 @@ import { AuthGuard } from '@nestjs/passport';
 import { AuthService } from './auth.service';
 import { SigninDto } from './dto/signin.dto';
 import { SignupDto } from './dto/signup.dto';
-import { UsersService } from 'modules/user/user.service';
-import { IRequest } from 'modules/user/user.interface';
+import { UsersService } from '@modules/user/user.service';
+import { IRequest } from '@modules/user/user.interface';
 
 @Controller('api/auth')
 @ApiTags('authentication')

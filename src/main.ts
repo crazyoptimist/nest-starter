@@ -2,9 +2,9 @@ import { NestFactory, Reflector } from '@nestjs/core';
 import { ClassSerializerInterceptor, ValidationPipe } from '@nestjs/common';
 import { useContainer } from 'class-validator';
 
-import { AppModule } from 'modules/main/app.module';
+import { AppModule } from './modules/main/app.module';
 import { setupSwagger } from './swagger';
-import { TrimStringsPipe } from 'modules/common/transformer/trim-strings.pipe';
+import { TrimStringsPipe } from './modules/common/transformer/trim-strings.pipe';
 
 declare const module: any;
 
