@@ -1,3 +1,5 @@
+import 'source-map-support/register';
+
 import { NestFactory, Reflector } from '@nestjs/core';
 import { ClassSerializerInterceptor, ValidationPipe } from '@nestjs/common';
 import { useContainer } from 'class-validator';
