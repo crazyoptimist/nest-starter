@@ -13,8 +13,8 @@
     "outDir": "./dist",
     "baseUrl": "./src",
     "paths": {
-      "@app/*": ["*"],
-      "@modules/*": ["modules/*"]
+      "@modules/*": ["modules/*"],
+      "@app/*": ["*"]
     }
   },
   "include": ["src"],
