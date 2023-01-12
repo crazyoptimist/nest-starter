@@ -7,7 +7,7 @@ import {
 } from 'typeorm';
 import { Exclude } from 'class-transformer';
 
-import { PasswordTransformer } from '../common/transformer/password.transformer';
+import { PasswordTransformer } from '@modules/common/transformer/password.transformer';
 
 @Entity({
   name: 'users',

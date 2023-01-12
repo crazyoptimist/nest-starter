@@ -21,5 +21,6 @@ module.exports = function (options, webpack) {
         autoRestart: false,
       }),
     ],
+    devtool: 'inline-source-map',
   };
 };
