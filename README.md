@@ -1,36 +1,80 @@
 # NestJS Starter
 
-[![CI for nest-starter](https://github.com/crazyoptimist/nest-starter/actions/workflows/build.yml/badge.svg)](https://github.com/crazyoptimist/nest-starter/actions/workflows/build.yml)
+[![build & test](https://github.com/crazyoptimist/nest-starter/actions/workflows/build.yml/badge.svg)](https://github.com/crazyoptimist/nest-starter/actions/workflows/build.yml)
 
-## How to start
+Build a modular REST API with NestJS framework.
 
-### Without Docker
+## Table of Contents
 
-- Create dotenv file by running `cp .env.example .env` and configure it with proper values
-- Install dependencies by running `yarn install`
-- Run it in dev mode by `yarn start:dev` (it will serve at port 3000)
-- Or you can use webpack hot module reload `yarn start`
+- [What is this?](#what-is-this)
+- [Run(Dev Mode)](#run-dev-mode)
+  - [With Docker](#with-docker)
+  - [Without Docker](#without-docker)
+- [DB Migrations](#db-migrations)
+  - [Generate a Migration](#generate-a-migration)
+  - [Run Pending Migrations](#run-pending-migrations)
+  - [Revert a Migration](#revert-a-migration)
+- [Tests](#tests)
+- [Environment Configuration](#environment-configuration)
+- [API Documentation](#api-documentation)
+- [Authentication](#authentication)
+- [License](#license)
+- [Maintainers](#maintainers)
 
-### Using Docker
+## What is this?
+
+A REST API template based on NestJS with JWT auth, Open API 3.0 documentation, TypeORM integration already implemented.
+
+## Run(Dev Mode)
+
+### With Docker
 
 ```bash
 cp .env.example .env
 docker-compose up -d
 ```
 
-## Migrations
+### Without Docker
+
+Create dotenv file and fill it with proper values
+
+```bash
+cp .env.example .env
+```
+
+Install dependencies
+
+```bash
+yarn install
+```
+
+Run the application
+
+```bash
+yarn start:dev
+```
+
+HMR(Hot Module Reload) is configured with webpack, so you can use
+
+```bash
+yarn start
+```
+
+## DB Migrations
 
 If you don't work on a production-ready project you can always change `DB_SYNC` env variable to true so you can play with NestJS without the need to write actual migrations.
 
-**`synchronize: true` shouldn't be used in production - otherwise, you can lose production data.**
+**`DB_SYNC` should not be set to `true` in production. You may lose production data otherwise!**
 
 ### Generate a Migration
+
+Make sure to use `npm` for commands follow, because `yarn` does not support `$npm_config_name`.
 
 ```bash
 npm run migration:generate --name=AddAgeColumnToUser
 ```
 
-or with docker:
+Or with docker:
 
 ```bash
 docker exec -it nest npm run migration:generate --name=AddAgeColumnToUser
@@ -41,41 +85,45 @@ Migration files are placed under `src/migrations`.
 ### Run Pending Migrations
 
 ```bash
-docker exec -it nest yarn migration:run
+yarn migration:run
 ```
 
 ### Revert a Migration
 
 ```bash
-docker exec -it nest yarn migration:revert
+yarn migration:revert
 ```
 
-## Test
+## Tests
 
 ```bash
 # unit tests
-docker exec -it nest yarn test
+yarn test
 
 # e2e tests
-docker exec -it nest yarn test:e2e
+yarn test:e2e
 
 # test coverage
-docker exec -it nest yarn test:cov
+yarn test:cov
 ```
 
 ## Environment Configuration
 
-Integrated Configuration Module so you can just inject `ConfigService`
-and read all environment variables from dotenv file.
+`@nestjs/config` is used, so you can just inject `ConfigService` to read environment variables from the dotenv file.
 
-## Swagger
+## API Documentation
 
-Swagger is setup already, you can check it by browsing `BASE_URL/api/docs`.
+OpenAPI 3.0 is configured, and the API docs is hosted at `BASE_URL/api/docs`.
 
-## Authentication - JWT
+## Authentication
 
-Already preconfigured JWT authentication.  
-It would be greater to change current password hashing to something more secure.
+JWT authentication is configured.
+
+It would be greater to change the current password hashing to something more secure.
+
+## License
+
+MIT
 
 ## Maintainers
 
