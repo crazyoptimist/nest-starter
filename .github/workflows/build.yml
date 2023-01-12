@@ -1,4 +1,4 @@
-name: CI for nest-starter
+name: Build & Test
 
 on: [ push ]
 
@@ -37,9 +37,24 @@ jobs:
         working-directory: .
         if: steps.yarn-cache.outputs.cache-hit != 'true'
         run: yarn install --frozen-lockfile
-      - name: Build
+      - name: Build(Type Check)
         working-directory: .
         run: tsc
+      - name: Setup MySQL server
+        uses: shogo82148/actions-setup-mysql@v1
+        with:
+          mysql-version: '8.0'
+          user: 'test'
+          password: 'password'
+      - name: Create a test database
+        run: mysql -uroot -h127.0.0.1 -e 'CREATE DATABASE test;'
+      - name: Load dotenv
+        working-directory: .
+        run: cp .env.ci .env
+      - uses: xom9ikk/dotenv@v2
+      - name: Run migrations
+        working-directory: .
+        run: yarn migration:run
       - name: Run unit tests
         working-directory: .
         run: yarn test
