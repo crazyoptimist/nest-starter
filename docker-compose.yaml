@@ -4,10 +4,13 @@ services:
     build:
       context: .
       dockerfile: Dockerfile
-    image: nest_prod
-    container_name: nest_prod
+    image: nest
+    container_name: nest
     ports:
       - 3000:3000
+    volumes:
+      - ./:/app/
+    command: sh -c "yarn migration:run && yarn start:dev"
     restart: unless-stopped
     depends_on:
       - db
@@ -27,10 +30,10 @@ services:
       - mysqldata:/var/lib/mysql
       - .docker/mysql.cnf:/etc/mysql/conf.d/custom.cnf
     environment:
-      MYSQL_DATABASE: nest
-      MYSQL_USER: nest
-      MYSQL_PASSWORD: nest
-      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: "${DB_DATABASE}"
+      MYSQL_USER: "${DB_USERNAME}"
+      MYSQL_PASSWORD: "${DB_PASSWORD}"
+      MYSQL_ROOT_PASSWORD: "${DB_PASSWORD}"
 
 volumes:
   mysqldata:
