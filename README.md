@@ -7,7 +7,7 @@ Build a modular REST API with NestJS framework.
 ## Table of Contents
 
 - [What is this?](#what-is-this)
-- [Run(Dev Mode)](#run-dev-mode)
+- [Run(Dev Mode)](#rundev-mode)
   - [With Docker](#with-docker)
   - [Without Docker](#without-docker)
 - [DB Migrations](#db-migrations)
