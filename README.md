@@ -76,3 +76,7 @@ Swagger is setup already, you can check it by browsing `BASE_URL/api/docs`.
 
 Already preconfigured JWT authentication.  
 It would be greater to change current password hashing to something more secure.
+
+## Maintainers
+
+[crazyoptimist](https://crazyoptimist.net)
