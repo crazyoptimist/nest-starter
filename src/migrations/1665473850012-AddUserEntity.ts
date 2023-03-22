@@ -1,15 +1,28 @@
-import { MigrationInterface, QueryRunner } from 'typeorm';
+const AWS = require('aws-sdk');
+const { v4: uuidv4 } = require('uuid');
 
-export class AddUserEntity1665473850012 implements MigrationInterface {
-  name = 'AddUserEntity1665473850012';
+const dynamodb = new AWS.DynamoDB();
 
-  public async up(queryRunner: QueryRunner): Promise<void> {
-    await queryRunner.query(
-      `CREATE TABLE "users" ("created_at" TIMESTAMP NOT NULL DEFAULT now(), "updated_at" TIMESTAMP NOT NULL DEFAULT now(), "id" SERIAL NOT NULL, "firstName" character varying(255) NOT NULL, "lastName" character varying(255) NOT NULL, "email" character varying(255) NOT NULL, "password" character varying(255) NOT NULL, CONSTRAINT "PK_a3ffb1c0c8416b9fc6f907b7433" PRIMARY KEY ("id"))`,
-    );
+const params = {
+  TableName: 'users',
+  KeySchema: [{ AttributeName: 'id', KeyType: 'HASH' }],
+  AttributeDefinitions: [
+    { AttributeName: 'id', AttributeType: 'S' },
+    { AttributeName: 'firstName', AttributeType: 'S' },
+    { AttributeName: 'lastName', AttributeType: 'S' },
+    { AttributeName: 'email', AttributeType: 'S' },
+    { AttributeName: 'password', AttributeType: 'S' },
+  ],
+  ProvisionedThroughput: {
+    ReadCapacityUnits: 5,
+    WriteCapacityUnits: 5,
+  },
+};
+
+dynamodb.createTable(params, (err, data) => {
+  if (err) {
+    console.error(`Error creating table: ${err}`);
+  } else {
+    console.log(`Table created: ${JSON.stringify(data)}`);
   }
-
-  public async down(queryRunner: QueryRunner): Promise<void> {
-    await queryRunner.query(`DROP TABLE "users"`);
-  }
-}
+});

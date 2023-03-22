@@ -1,43 +1,23 @@
-import {
-  Entity,
-  Column,
-  PrimaryGeneratedColumn,
-  CreateDateColumn,
-  UpdateDateColumn,
-} from 'typeorm';
-import { Exclude } from 'class-transformer';
+import { Schema, Prop, SchemaFactory } from '@nestjs/mongoose';
+import { Document } from 'mongoose';
+import { Attribute, hashKey, rangeKey } from '@shiftcoders/dynamo-easy';
 
-import { PasswordTransformer } from '@app/modules/common/transformer/password.transformer';
+@Schema()
+export class User extends Document {
+  @hashKey()
+  id: string;
 
-@Entity({
-  name: 'users',
-})
-export class User {
-  @CreateDateColumn()
-  @Exclude()
-  created_at: Date;
-
-  @UpdateDateColumn()
-  @Exclude()
-  updated_at: Date;
-
-  @PrimaryGeneratedColumn()
-  id: number;
-
-  @Column({ length: 255 })
+  @Attribute()
   firstName: string;
 
-  @Column({ length: 255 })
+  @Attribute()
   lastName: string;
 
-  @Column({ length: 255 })
+  @rangeKey()
   email: string;
 
-  @Column({
-    name: 'password',
-    length: 255,
-    transformer: new PasswordTransformer(),
-  })
-  @Exclude()
+  @Attribute()
   password: string;
 }
+
+export const UserSchema = SchemaFactory.createForClass(User);
