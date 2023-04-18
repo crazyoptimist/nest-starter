@@ -74,3 +74,26 @@ Swagger is setup already, you can check it by browsing `BASE_URL/api/docs`.
 
 Already preconfigured JWT authentication.  
 It would be greater to change current password hashing to something more secure.
+
+## CRUD Commands for LocalStack
+
+### Create Table
+
+```bash
+aws dynamodb --endpoint-url=http://localhost:4566 create-table \
+    --table-name Users \
+    --attribute-definitions \
+        AttributeName=Name,AttributeType=S \
+        AttributeName=Password,AttributeType=S \
+    --key-schema \
+        AttributeName=Name,KeyType=HASH \
+        AttributeName=Password,KeyType=RANGE \
+--provisioned-throughput \
+        ReadCapacityUnits=10,WriteCapacityUnits=5
+```
+### Checkout Table Status
+
+```bash
+aws --endpoint-url=http://localhost:4566 dynamodb describe-table --table-name Users | grep TableStatus
+```
+

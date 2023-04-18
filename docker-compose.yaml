@@ -1,36 +1,53 @@
-version: "3"
+#version: "3"
+#services:
+#  nest:
+#    build:
+#      context: .
+#      dockerfile: Dockerfile
+#    image: nest_prod
+#    container_name: nest_prod
+#    ports:
+#      - 3000:3000
+#    restart: unless-stopped
+#    depends_on:
+#      - db
+#
+#  db:
+#    image: mysql:8
+#    container_name: mysql_eight
+#    ports:
+#      - 3306:3306
+#    command:
+#      [
+#        "--default_authentication_plugin=mysql_native_password",
+#        "--character-set-server=utf8",
+#        "--collation-server=utf8_general_ci",
+#      ]
+#    volumes:
+#      - mysqldata:/var/lib/mysql
+#      - .docker/mysql.cnf:/etc/mysql/conf.d/custom.cnf
+#    environment:
+#      MYSQL_DATABASE: nest
+#      MYSQL_USER: nest
+#      MYSQL_PASSWORD: nest
+#      MYSQL_ROOT_PASSWORD: root
+#
+#volumes:
+#  mysqldata:
+
+version: '3.0'
+
 services:
-  nest:
-    build:
-      context: .
-      dockerfile: Dockerfile
-    image: nest_prod
-    container_name: nest_prod
-    ports:
-      - 3000:3000
-    restart: unless-stopped
-    depends_on:
-      - db
 
-  db:
-    image: mysql:8
-    container_name: mysql_eight
-    ports:
-      - 3306:3306
-    command:
-      [
-        "--default_authentication_plugin=mysql_native_password",
-        "--character-set-server=utf8",
-        "--collation-server=utf8_general_ci",
-      ]
-    volumes:
-      - mysqldata:/var/lib/mysql
-      - .docker/mysql.cnf:/etc/mysql/conf.d/custom.cnf
+  localstack:
+    image: localstack/localstack:latest
     environment:
-      MYSQL_DATABASE: nest
-      MYSQL_USER: nest
-      MYSQL_PASSWORD: nest
-      MYSQL_ROOT_PASSWORD: root
-
-volumes:
-  mysqldata:
+      - AWS_DEFAULT_REGION=ap-southeast-1
+      - EDGE_PORT=4566
+      - SERVICES=dynamodb
+      - KINESIS_PROVIDER=kinesalite
+    ports:
+      - '4566:4566'
+    volumes:
+      - "${TMPDIR:-/tmp/localstack}:/tmp/localstack"
+      - "/var/run/docker.sock:/var/run/docker.sock"
