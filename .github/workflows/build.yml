@@ -54,7 +54,7 @@ jobs:
       - uses: xom9ikk/dotenv@v2
       - name: Run migrations
         working-directory: .
-        run: yarn migration:run
+        run: yarn db:upgrade
       - name: Run unit tests
         working-directory: .
         run: yarn test

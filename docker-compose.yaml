@@ -1,20 +1,5 @@
 version: "3"
 services:
-  nest:
-    build:
-      context: .
-      dockerfile: Dockerfile
-    image: nest
-    container_name: nest
-    ports:
-      - 3000:3000
-    volumes:
-      - ./:/app/
-    command: sh -c "yarn migration:run && yarn start:dev"
-    restart: unless-stopped
-    depends_on:
-      - db
-
   db:
     image: mysql:8
     container_name: mysql_eight
@@ -28,12 +13,25 @@ services:
       ]
     volumes:
       - mysqldata:/var/lib/mysql
-      - .docker/mysql.cnf:/etc/mysql/conf.d/custom.cnf
+      - .docker/custom.cnf:/etc/mysql/conf.d/custom.cnf
     environment:
-      MYSQL_DATABASE: "${DB_DATABASE}"
-      MYSQL_USER: "${DB_USERNAME}"
-      MYSQL_PASSWORD: "${DB_PASSWORD}"
-      MYSQL_ROOT_PASSWORD: "${DB_PASSWORD}"
-
+      MYSQL_DATABASE: nest
+      MYSQL_USER: nest
+      MYSQL_PASSWORD: nest
+      MYSQL_ROOT_PASSWORD: root
+  app:
+    build: .
+    container_name: nest_dev
+    ports:
+      - 3000:3000
+    environment:
+      NODE_ENV: development
+      DB_HOST: db
+      DB_PORT: 3306
+      DB_USERNAME: nest
+      DB_PASSWORD: nest
+      DB_DATABASE: nest
+    depends_on:
+      - db
 volumes:
   mysqldata:

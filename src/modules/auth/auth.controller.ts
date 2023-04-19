@@ -8,9 +8,9 @@ import {
 } from '@nestjs/common';
 import { ApiResponse, ApiTags, ApiBearerAuth } from '@nestjs/swagger';
 import { AuthGuard } from '@nestjs/passport';
-import { AuthService } from './auth.service';
-import { SigninDto } from './dto/signin.dto';
-import { SignupDto } from './dto/signup.dto';
+import { AuthService } from '@modules/auth/auth.service';
+import { SigninDto } from '@modules/auth/dto/signin.dto';
+import { SignupDto } from '@modules/auth/dto/signup.dto';
 import { UsersService } from '@modules/user/user.service';
 import { IRequest } from '@modules/user/user.interface';
 
