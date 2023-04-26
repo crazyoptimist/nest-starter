@@ -33,5 +33,18 @@ services:
       DB_DATABASE: nest
     depends_on:
       - db
+  localstack:
+    image: localstack/localstack:latest
+    environment:
+      - AWS_DEFAULT_REGION=us-east-1
+      - EDGE_PORT=4566
+      - SERVICES=dynamodb
+      - KINESIS_PROVIDER=kinesalite
+    ports:
+      - '4566:4566'
+    volumes:
+      - "${TMPDIR:-/tmp/localstack}:/tmp/localstack"
+      - "/var/run/docker.sock:/var/run/docker.sock"
+
 volumes:
   mysqldata:
