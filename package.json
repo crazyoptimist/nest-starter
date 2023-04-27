@@ -26,6 +26,9 @@
     "prepare": "husky install"
   },
   "dependencies": {
+    "@aws-sdk/client-dynamodb": "^3.321.1",
+    "@aws-sdk/lib-dynamodb": "^3.321.1",
+    "@nest-dynamodb/typedorm": "^1.0.1",
     "@nestjs/common": "^9.0.11",
     "@nestjs/config": "^2.2.0",
     "@nestjs/core": "^9.0.11",
@@ -34,6 +37,9 @@
     "@nestjs/platform-express": "^9.0.11",
     "@nestjs/swagger": "^6.1.2",
     "@nestjs/typeorm": "^9.0.1",
+    "@typedorm/common": "^1.15.4",
+    "@typedorm/core": "^1.15.4",
+    "aws-sdk": "^2.1367.0",
     "bcrypt": "^5.0.1",
     "class-transformer": "^0.5.1",
     "class-validator": "^0.14.0",
@@ -81,7 +87,7 @@
     "webpack-node-externals": "^3.0.0"
   },
   "_moduleAliases": {
-    "@app": "./dist/src",
-    "@modules": "./dist/src/modules"
+    "@app": "./dist",
+    "@modules": "./dist/modules"
   }
 }

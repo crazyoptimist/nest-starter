@@ -19,6 +19,7 @@ services:
       MYSQL_USER: nest
       MYSQL_PASSWORD: nest
       MYSQL_ROOT_PASSWORD: root
+
   app:
     build: .
     container_name: nest_dev
@@ -33,7 +34,8 @@ services:
       DB_DATABASE: nest
     depends_on:
       - db
-  localstack:
+
+  aws:
     image: localstack/localstack:latest
     environment:
       - AWS_DEFAULT_REGION=us-east-1
