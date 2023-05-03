@@ -1,4 +1,5 @@
 import 'source-map-support/register';
+import 'reflect-metadata';
 
 if (!process.env.IS_TS_NODE) {
   require('module-alias/register');

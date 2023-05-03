@@ -2,7 +2,7 @@ import { Module } from '@nestjs/common';
 import { TypeOrmModule, TypeOrmModuleAsyncOptions } from '@nestjs/typeorm';
 import { TypeDormModule } from '@nest-dynamodb/typedorm';
 import { DocumentClientV3 } from '@typedorm/document-client';
-import { DynamoDBClient } from '@aws-sdk/client-dynamodb';
+import { DynamoDBClient, DynamoDBClientConfig } from '@aws-sdk/client-dynamodb';
 
 import { AppController } from '@modules/main/app.controller';
 import { AppService } from '@modules/main/app.service';
@@ -12,6 +12,8 @@ import { CommonModule } from '@modules/common/common.module';
 
 // TypeORM Entities
 import { User } from '@modules/user/user.entity';
+
+// TypeDORM Entities
 
 // TypeDorm table
 import { ddbGlobalTable } from '@app/ddbTable';
@@ -36,13 +38,20 @@ import { ddbGlobalTable } from '@app/ddbTable';
       },
     }),
     TypeDormModule.forRootAsync({
-      // need another name here for dependency injection, @InjectTypeDorm(instanceName)
+      // need a different name here for dependency injection, @InjectTypeDorm(instanceName)
+      imports: [ConfigModule],
+      inject: [ConfigService],
       name: 'ddbInstance',
-      useFactory: async () => {
+      useFactory: async (configService: ConfigService) => {
         return {
           ddbGlobalTable,
           entities: [],
-          documentClient: new DocumentClientV3(new DynamoDBClient({})),
+          documentClient: new DocumentClientV3(
+            new DynamoDBClient({
+              region: configService.get('AWS_REGION'),
+              endpoint: configService.get('AWS_DDB_ENDPOINT'),
+            }),
+          ),
           name: 'ddbInstance',
         };
       },
