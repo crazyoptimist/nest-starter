@@ -21,7 +21,9 @@ Build a modular REST API with NestJS framework.
 
 ## What is this?
 
-A REST API template based on NestJS with JWT auth, Open API 3.0 documentation, TypeORM integration already implemented.
+This is a NestJS RESTful API starter with JWT auth, Open API 3 documentation, TypeORM integrated.
+
+Why am I maintianing this? By using this template, you will be able to spin up a production-ready RESTful API super fast, writing very little boilerplate code.
 
 ## Getting started
 
