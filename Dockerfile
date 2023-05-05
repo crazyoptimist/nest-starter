@@ -3,14 +3,16 @@ FROM node:lts-alpine
 WORKDIR /app
 
 ENV NODE_ENV production
-COPY package.json yarn.lock ./
 
-# install dev dependencies too
-RUN set -x && yarn --prod=false
+COPY package*.json ./
+
+# `set -x` prints out the command before running it, enabling easier tracing
+RUN set -x && npm ci
 
 COPY . .
-RUN set -x && yarn run prestart:prod
+
+RUN set -x && yarn run build
 
 EXPOSE 3000
 
-CMD [ "node", "-r", "./tsconfig-paths-bootstrap.js" ,"dist/main.js" ]
+CMD ["npm", "run", "start:prod"]
