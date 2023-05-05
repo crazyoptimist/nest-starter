@@ -23,7 +23,5 @@
       "@app/*": ["src/*"],
       "@modules/*": ["src/modules/*"]
     }
-  },
-  "include": ["src"],
-  "exclude": ["node_modules", "**/*.spec.ts"]
+  }
 }
