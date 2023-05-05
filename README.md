@@ -7,7 +7,7 @@ Build a modular REST API with NestJS framework.
 ## Table of Contents
 
 - [What is this?](#what-is-this)
-- [Get started](#get-started)
+- [Getting started](#getting-started)
 - [DB Migrations](#db-migrations)
   - [Generate a Migration](#generate-a-migration)
   - [Run Pending Migrations](#run-pending-migrations)
@@ -23,7 +23,7 @@ Build a modular REST API with NestJS framework.
 
 A REST API template based on NestJS with JWT auth, Open API 3.0 documentation, TypeORM integration already implemented.
 
-## Get started
+## Getting started
 
 Create dotenv file and fill out with proper values
 
