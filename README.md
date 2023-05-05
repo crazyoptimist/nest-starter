@@ -62,9 +62,9 @@ yarn start
 
 ## DB Migrations
 
-If you don't work on a production-ready project you can always change `DB_SYNC` env variable to true so you can play with NestJS without the need to write actual migrations.
+If you don't need incremental database migrations, set `DB_SYNC` env variable to `true`, which will keep syncing the database structure with the schema defined in the code base.
 
-**`DB_SYNC` should not be set to `true` in production. You may lose production data otherwise!**
+**Do NOT set `DB_SYNC` to `true` in production. You may lose production data if you do!**
 
 ### Generate a Migration
 
