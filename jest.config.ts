@@ -10,7 +10,7 @@ const config: Config = {
     '^@app/(.*)$': '<rootDir>/src/$1',
     '^@modules/(.*)$': '<rootDir>/src/modules/$1',
   },
-  testRegex: '.spec.ts$',
+  testRegex: '\\.spec.ts$',
   transform: {
     '^.+\\.(t|j)s$': ['ts-jest', { tsconfig: 'tsconfig.json' }],
   },
