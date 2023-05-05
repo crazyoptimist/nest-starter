@@ -7,9 +7,7 @@ Build a modular REST API with NestJS framework.
 ## Table of Contents
 
 - [What is this?](#what-is-this)
-- [Run(Dev Mode)](#rundev-mode)
-  - [With Docker](#with-docker)
-  - [Without Docker](#without-docker)
+- [Get started](#get-started)
 - [DB Migrations](#db-migrations)
   - [Generate a Migration](#generate-a-migration)
   - [Run Pending Migrations](#run-pending-migrations)
@@ -25,18 +23,9 @@ Build a modular REST API with NestJS framework.
 
 A REST API template based on NestJS with JWT auth, Open API 3.0 documentation, TypeORM integration already implemented.
 
-## Run(Dev Mode)
+## Get started
 
-### With Docker
-
-```bash
-cp .env.example .env
-docker-compose up -d
-```
-
-### Without Docker
-
-Create dotenv file and fill it with proper values
+Create dotenv file and fill out with proper values
 
 ```bash
 cp .env.example .env
@@ -45,20 +34,16 @@ cp .env.example .env
 Install dependencies
 
 ```bash
-yarn install
+npm install
 ```
 
 Run the application
 
 ```bash
-yarn start:dev
+npm run dev
 ```
 
-HMR(Hot Module Reload) is configured with webpack, so you can use
-
-```bash
-yarn start
-```
+HMR(Hot Module Reload) is configured with webpack.
 
 ## DB Migrations
 
@@ -85,13 +70,15 @@ Migration files are placed under `src/migrations`.
 ### Run Pending Migrations
 
 ```bash
-yarn migration:run
+npm run migration:run
 ```
 
 ### Revert a Migration
 
+Revert the last migration
+
 ```bash
-yarn migration:revert
+npm run migration:revert
 ```
 
 ## Tests
