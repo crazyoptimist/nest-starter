@@ -39,4 +39,8 @@ export class UsersService {
       this.userRepository.create(signupDto),
     );
   }
+
+  async getUsersCount(): Promise<number> {
+    return await this.userRepository.count();
+  }
 }

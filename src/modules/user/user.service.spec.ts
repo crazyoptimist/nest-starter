@@ -1,67 +1,130 @@
 import { Test, TestingModule } from '@nestjs/testing';
-import { DataSource, Repository } from 'typeorm';
-import {
-  getDataSourceToken,
-  getRepositoryToken,
-  TypeOrmModule,
-} from '@nestjs/typeorm';
-
+import { getRepositoryToken } from '@nestjs/typeorm';
+import { Repository } from 'typeorm';
 import { UsersService } from './user.service';
 import { User } from './user.entity';
-import { AppModule } from '../main/app.module';
+import { SignupDto } from './../auth/dto/signup.dto';
 
 describe('UsersService', () => {
   let service: UsersService;
   let repository: Repository<User>;
-  let module: TestingModule;
 
-  const fixture = {
-    firstName: 'John',
-    lastName: 'Doe',
-    email: 'admin@example.com',
-    password: 'mypassword',
-    passwordConfirmation: 'mypassword',
-  };
+  beforeEach(async () => {
+    // create a mock repository object
+    const mockRepository = {
+      findOne: jest.fn(),
+      create: jest.fn(),
+      save: jest.fn(),
+      createQueryBuilder: jest.fn(() => ({
+        where: jest.fn().mockReturnThis(),
+        setParameter: jest.fn().mockReturnThis(),
+        getOne: jest.fn().mockResolvedValueOnce(null),
+      })),
+      count: jest.fn(),
+    };
 
-  beforeAll(async () => {
-    module = await Test.createTestingModule({
-      imports: [AppModule, TypeOrmModule.forFeature([User])],
-      providers: [UsersService],
+    const module: TestingModule = await Test.createTestingModule({
+      providers: [
+        UsersService,
+        {
+          provide: getRepositoryToken(User),
+          useValue: mockRepository,
+        },
+      ],
     }).compile();
 
     service = module.get<UsersService>(UsersService);
-    repository = module.get<Repository<User>>(getRepositoryToken(User));
-  });
-
-  beforeEach(async () => await repository.clear());
-
-  afterAll(async () => {
-    const dataSource = module.get<DataSource>(getDataSourceToken());
-    await dataSource.destroy();
+    repository = module.get<Repository<User>>(
+      getRepositoryToken(User, undefined),
+    );
   });
 
   describe('create', () => {
     it('should create a new user', async () => {
-      await service.create(fixture);
-      const count = await repository.count();
-      expect(count).toBe(1);
+      const signupDto: SignupDto = {
+        email: 'test@example.com',
+        firstName: 'John',
+        lastName: 'Doe',
+        password: 'mypassword',
+        passwordConfirmation: 'mypassword',
+      };
+
+      jest.spyOn(repository, 'findOne').mockResolvedValue(null); // Mock no existing user with the same email
+      jest.spyOn(repository, 'createQueryBuilder').mockReturnValueOnce({
+        where: jest.fn().mockReturnThis(),
+        setParameter: jest.fn().mockReturnThis(),
+        getOne: jest.fn().mockResolvedValueOnce(null),
+      } as any);
+      jest.spyOn(repository, 'create').mockReturnValue(signupDto as any);
+      jest.spyOn(repository, 'save').mockResolvedValueOnce(signupDto as any);
+
+      const result = await service.create(signupDto);
+
+      expect(repository.create).toHaveBeenCalledWith(signupDto);
+      expect(result).toEqual(signupDto);
     });
   });
 
   describe('get', () => {
-    it('should return a user', async () => {
-      const { id } = await repository.save(fixture);
-      const user = await service.get(id);
-      expect(user?.id).toBe(id);
+    it('should return a user by ID', async () => {
+      const userId = 1;
+      const mockUser: User = {
+        id: userId,
+        firstName: 'John',
+        lastName: 'Doe',
+        email: 'test@example.com',
+        password: 'password',
+        created_at: new Date(),
+        updated_at: new Date(),
+      };
+
+      jest.spyOn(repository, 'findOne').mockResolvedValueOnce(mockUser);
+
+      const result = await service.get(userId);
+
+      expect(repository.findOne).toHaveBeenCalledWith({
+        where: { id: userId },
+      });
+      expect(result).toEqual(mockUser);
     });
   });
 
   describe('getByEmail', () => {
-    it('should return a user with the email', async () => {
-      await repository.save(fixture);
-      const email = fixture.email;
-      const user = await service.getByEmail(email);
-      expect(user?.email).toBe(email);
+    it('should return a user by email', async () => {
+      const email = 'test@example.com';
+      const mockUser: User = {
+        id: 1,
+        firstName: 'John',
+        lastName: 'Doe',
+        email,
+        password: 'password',
+        created_at: new Date(),
+        updated_at: new Date(),
+      };
+
+      jest.spyOn(repository, 'createQueryBuilder').mockReturnValueOnce({
+        where: jest.fn().mockReturnThis(),
+        setParameter: jest.fn().mockReturnThis(),
+        getOne: jest.fn().mockResolvedValueOnce(mockUser),
+      } as any);
+
+      const result = await service.getByEmail(email);
+
+      expect(repository.createQueryBuilder).toHaveBeenCalled();
+      expect(result).toEqual(mockUser);
+    });
+  });
+
+  describe('getUsersCount', () => {
+    it('should return the count of users', async () => {
+      const mockCount = 5;
+
+      jest.spyOn(repository, 'count').mockResolvedValueOnce(mockCount);
+
+      const result = await service.getUsersCount();
+
+      expect(repository.count).toHaveBeenCalled();
+      expect(result).toBe(mockCount);
     });
   });
 });

@@ -45,8 +45,9 @@ services:
     ports:
       - '4566:4566'
     volumes:
-      - "${TMPDIR:-/tmp/localstack}:/tmp/localstack"
+      - localstack:/tmp/localstack
       - "/var/run/docker.sock:/var/run/docker.sock"
 
 volumes:
   mysqldata:
+  localstack:

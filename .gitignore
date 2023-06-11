@@ -12,6 +12,8 @@ lerna-debug.log
 npm-debug.log
 yarn-error.log
 **/npm-debug.log
+.yarnrc.yml
+.yarn
 
 # environment
 .env
@@ -26,3 +28,8 @@ yarn-error.log
 build/config\.gypi
 
 sqlite-example.sql
+
+# extra
+naming
+writing
+=
