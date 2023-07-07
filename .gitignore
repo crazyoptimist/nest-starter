@@ -33,3 +33,7 @@ sqlite-example.sql
 naming
 writing
 =
+
+# Mr. Developer
+*.sublime-project
+*.sublime-workspace

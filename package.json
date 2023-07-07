@@ -39,6 +39,7 @@
     "@nestjs/typeorm": "^9.0.1",
     "@typedorm/common": "^1.15.4",
     "@typedorm/core": "^1.15.4",
+    "@vendia/serverless-express": "^4.10.1",
     "aws-sdk": "^2.1367.0",
     "bcrypt": "^5.0.1",
     "class-transformer": "^0.5.1",
