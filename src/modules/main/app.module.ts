@@ -37,25 +37,6 @@ import { ddbGlobalTable } from '@app/ddbTable';
         } as TypeOrmModuleAsyncOptions;
       },
     }),
-    TypeDormModule.forRootAsync({
-      // need a different name here for dependency injection, @InjectTypeDorm(instanceName)
-      imports: [ConfigModule],
-      inject: [ConfigService],
-      name: 'ddbInstance',
-      useFactory: async (configService: ConfigService) => {
-        return {
-          ddbGlobalTable,
-          entities: [],
-          documentClient: new DocumentClientV3(
-            new DynamoDBClient({
-              region: configService.get('AWS_REGION'),
-              endpoint: configService.get('AWS_DDB_ENDPOINT'),
-            }),
-          ),
-          name: 'ddbInstance',
-        };
-      },
-    }),
     ConfigModule.forRoot({
       envFilePath: '.env',
       isGlobal: true,
