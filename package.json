@@ -23,7 +23,8 @@
     "db:upgrade": "yarn typeorm migration:run",
     "db:downgrade": "yarn typeorm migration:revert",
     "db:drop": "npm run typeorm schema:drop",
-    "prepare": "husky install"
+    "prepare": "husky install",
+    "deploy": "npm install && npm run build && npm run start:dev"
   },
   "dependencies": {
     "@aws-sdk/client-dynamodb": "^3.321.1",
