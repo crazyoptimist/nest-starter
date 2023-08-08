@@ -19,7 +19,7 @@ updates:
     labels:
       - "npm dependencies"
     commit-message:
-      prefix: "dependabot-update-"
+      prefix: "dependabot:"
     ignore:
       - dependency-name: "*"
         update-types: ["version-update:semver-major"]
