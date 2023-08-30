@@ -1,5 +1,5 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { IsEmail, IsNotEmpty, MinLength } from 'class-validator';
+import { IsEmail, IsNotEmpty, IsOptional, MinLength } from 'class-validator';
 import { SameAs } from '@modules/common/validator/same-as.validator';
 
 export class SignupDto {
@@ -12,6 +12,14 @@ export class SignupDto {
   @ApiProperty({
     required: true,
   })
+  @ApiProperty()
+  @IsOptional()
+  phone?: string;
+
+  @ApiProperty()
+  @IsOptional()
+  external_identity_id?: string;
+  
   @IsNotEmpty()
   firstName: string;
 
