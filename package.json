@@ -27,8 +27,11 @@
     "deploy": "npm install && npm run build && npm run start:dev"
   },
   "dependencies": {
+    "@aws-lambda-powertools/logger": "^1.12.1",
     "@aws-sdk/client-dynamodb": "^3.321.1",
+    "@aws-sdk/client-lambda": "^3.398.0",
     "@aws-sdk/lib-dynamodb": "^3.321.1",
+    "@aws-sdk/smithy-client": "^3.374.0",
     "@nest-dynamodb/typedorm": "^1.0.1",
     "@nestjs/common": "^9.0.11",
     "@nestjs/config": "^2.2.0",
@@ -42,6 +45,7 @@
     "@typedorm/core": "^1.15.4",
     "@vendia/serverless-express": "^4.10.1",
     "aws-sdk": "^2.1367.0",
+    "axios": "^1.5.0",
     "bcrypt": "^5.0.1",
     "class-transformer": "^0.5.1",
     "class-validator": "^0.14.0",
