@@ -18,6 +18,7 @@ import { IRequest } from '@modules/user/user.interface';
 import { LambdaClient, InvokeCommand } from '@aws-sdk/client-lambda';
 import { Logger } from '@aws-lambda-powertools/logger';
 import { Lambda } from 'aws-sdk';
+import { ConfigService } from '@nestjs/config';
 
 @Controller('api/auth')
 @ApiTags('authentication')
@@ -27,6 +28,7 @@ export class AuthController {
   constructor(
     private readonly authService: AuthService,
     private readonly userService: UsersService,
+    private readonly configService: ConfigService
   ) {
 
     this.lambdaClient = new Lambda({
@@ -76,7 +78,7 @@ export class AuthController {
       };
       const lambdaParams = {
         // --> Please change the FunctionName to the name of your Lambda function <--
-        FunctionName: 'UserManagementStack-CreateUserLambda0154A2EB-5ufMqT4E5ntw',
+        FunctionName: this.configService.get('COGNITO_USER_MGMT_LAMBDA'),
         Payload: JSON.stringify(lambdaPayload),
       };
       this.logger.info(`lambda function params: ${JSON.stringify(lambdaParams)}`)
