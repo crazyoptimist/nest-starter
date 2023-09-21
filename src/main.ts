@@ -7,14 +7,13 @@ if (!process.env.IS_TS_NODE) {
 
 import { NestFactory, Reflector } from '@nestjs/core';
 import { ClassSerializerInterceptor, ValidationPipe } from '@nestjs/common';
-import { NestExpressApplication } from '@nestjs/platform-express';
 import { useContainer } from 'class-validator';
 
 import { AppModule } from '@app/modules/main/app.module';
 import { setupSwagger } from '@app/swagger';
 import { TrimStringsPipe } from '@app/modules/common/transformer/trim-strings.pipe';
+import { NestExpressApplication } from '@nestjs/platform-express';
 import { join } from 'path';
-
 
 declare const module: any;
 

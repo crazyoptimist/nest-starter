@@ -1,12 +1,14 @@
-import { Get, Controller, HttpStatus, Render } from '@nestjs/common';
+import { Get, Controller, HttpStatus, Res, Render } from '@nestjs/common';
 import { ApiTags } from '@nestjs/swagger';
 import { AppService } from '@modules/main/app.service';
 import { ConfigService } from '@nestjs/config';
+import { Response } from 'express';
+import { join } from 'path';
 
 @Controller()
 @ApiTags('healthcheck')
 export class AppController {
-  constructor(private readonly appService: AppService, private readonly configService: ConfigService) {}
+  constructor(private readonly appService: AppService, private readonly configService: ConfigService) { }
 
   @Get()
   root() {
@@ -23,5 +25,14 @@ export class AppController {
   ddb_test() {
     this.appService.ddb_test();
     return HttpStatus.OK;
+  }
+
+  @Get('eng-chinese-translator')
+  @Render('eng-chinese-translator')  // renders the eng-chinese-translator.ejs file
+  getTranslator() {
+    return {
+      lambdaFunctionName: this.configService.get('TRANSLATOR_LAMBDA_NAME'),
+      identityPoolId: this.configService.get('IDENTITY_POOL_ID')
+    };
   }
 }

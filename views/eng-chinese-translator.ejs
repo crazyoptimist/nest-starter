@@ -1,0 +1,301 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/aws-sdk/2.1456.0/aws-sdk.min.js"></script>
+
+    <title>ChatGPT Translator</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: Arial, Helvetica, sans-serif;
+            background-color: #0b0f1a;
+            color: #ffffff;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        h1 {
+            text-align: center;
+            margin: 10px;
+            padding: 20px;
+            color: #ffffff;
+        }
+
+        .form-container {
+            width: 80%;
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: space-between;
+            margin: 25px;
+            gap: 20px;
+        }
+
+        .form-section {
+            flex: 1;
+            background-color: #101928;
+            border-radius: 10px;
+            padding: 20px;
+        }
+
+        .form-section label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: bold;
+        }
+
+        .form-section textarea {
+            width: 100%;
+            height: 150px;
+            padding: 10px;
+            border: 1px solid #374251;
+            border-radius: 10px;
+            box-sizing: border-box;
+            margin-bottom: 20px;
+            background-color: #1e2838;
+            color: white;
+        }
+
+        .button-group {
+            display: flex;
+            justify-content: space-between;
+            gap: 10px;
+        }
+
+        .button-group button,
+        .flag-btn {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #374251;
+            border-radius: 10px;
+            box-sizing: border-box;
+            color: white;
+            font-weight: bold;
+            margin-top: 10px;
+            cursor: pointer;
+        }
+
+        .submit-btn {
+            background-color: #ef600f;
+        }
+
+        .clear-btn {
+            background-color: #404a5a;
+        }
+
+        .flag-btn {
+            background-color: #404a5a;
+        }
+
+        .clear-btn:hover,
+        .flag-btn:hover {
+            background-color: #374251;
+        }
+
+        .submit-btn:hover {
+            background-color: #c44a03;
+        }
+
+        @media (max-width: 768px) {
+            .form-container {
+                flex-direction: column;
+            }
+
+            .button-group {
+                flex-direction: column;
+                align-items: stretch;
+            }
+        }
+
+        .lds-ellipsis {
+            display: none;
+            position: fixed;
+            width: 80px;
+            height: 80px;
+            top: 35%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            z-index: 1000;
+        }
+
+        .lds-ellipsis div {
+            position: absolute;
+            top: 33px;
+            width: 13px;
+            height: 13px;
+            border-radius: 50%;
+            background: #fff;
+            animation-timing-function: cubic-bezier(0, 1, 1, 0);
+        }
+
+        .lds-ellipsis div:nth-child(1) {
+            left: 8px;
+            animation: lds-ellipsis1 0.6s infinite;
+        }
+
+        .lds-ellipsis div:nth-child(2) {
+            left: 8px;
+            animation: lds-ellipsis2 0.6s infinite;
+        }
+
+        .lds-ellipsis div:nth-child(3) {
+            left: 32px;
+            animation: lds-ellipsis2 0.6s infinite;
+        }
+
+        .lds-ellipsis div:nth-child(4) {
+            left: 56px;
+            animation: lds-ellipsis3 0.6s infinite;
+        }
+
+        @keyframes lds-ellipsis1 {
+            0% {
+                transform: scale(0);
+            }
+
+            100% {
+                transform: scale(1);
+            }
+        }
+
+        @keyframes lds-ellipsis3 {
+            0% {
+                transform: scale(1);
+            }
+
+            100% {
+                transform: scale(0);
+            }
+        }
+
+        @keyframes lds-ellipsis2 {
+            0% {
+                transform: translate(0, 0);
+            }
+
+            100% {
+                transform: translate(24px, 0);
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <h1>ChatGPT Translator</h1>
+    <div class="form-container">
+        <!-- User Input Form -->
+        <div class="form-section">
+            <div class="input-field">
+                <label id="userInputLabel">User Input</label>
+                <textarea type="text" class="user-input" id="userInput"></textarea>
+            </div>
+            <div class="button-group">
+                <button class="clear-btn" onclick="clearInput()">Clear</button>
+                <button class="submit-btn" id="submitBtn" onclick="handleSubmit()">Submit</button>
+            </div>
+        </div>
+        <div class="lds-ellipsis" id="spinner">
+            <div></div>
+            <div></div>
+            <div></div>
+            <div></div>
+        </div>
+
+        <!-- Response Form -->
+        <div class="form-section">
+            <div class="input-field">
+                <label id="responseLabel">Response</label>
+                <textarea type="text" class="response-input" id="response" readonly></textarea>
+            </div>
+            <button class="flag-btn">Flag</button>
+        </div>
+    </div>
+
+    <script>
+
+        AWS.config.region = 'us-east-2';
+        AWS.config.credentials = new AWS.CognitoIdentityCredentials({
+            IdentityPoolId: "<%= identityPoolId %>",
+        });
+
+        AWS.config.credentials.get(function (err) {
+            if (err) console.log(err);
+            else console.log('Successfully retreived AWS credentials');
+        });
+
+        function invokeLambdaFunction(inputText) {
+            var lambda = new AWS.Lambda();
+            var params = {
+                // Replace with your own Lambda function name
+                FunctionName: "<%= lambdaFunctionName %>",
+                Payload: JSON.stringify({ text: inputText })
+            };
+
+            lambda.invoke(params, function (error, data) {
+                document.getElementById('spinner').style.display = 'none';
+                if (error) {
+                    console.error('AWS error: ', JSON.stringify(error));
+                    return;
+                }
+                if (data.FunctionError) {
+                    console.error("Lambda function error: ", data.Payload);
+                    return;
+                }
+                if (data.Payload) {
+                    var response = JSON.parse(data.Payload);
+                    if (response.statusCode === 200) {
+                        var translationData = response.body;
+                        document.getElementById('response').value = translationData.output;
+
+                        const detectedResponseLanguage = detectLanguage(translationData.output);
+                        document.getElementById("responseLabel").textContent = detectedResponseLanguage;
+                    } else {
+                        console.log("lambda error: ", response.body)
+                    }
+                }
+            });
+        }
+
+        // Detect the language of the user input and call the Lambda function
+        function callLambdaFunction(inputText) {
+            const detectedInputLanguage = detectLanguage(inputText);
+            document.getElementById("userInputLabel").textContent = detectedInputLanguage;
+
+            invokeLambdaFunction(inputText);
+        }
+
+        // Submit the user input to the Lambda function
+        function handleSubmit() {
+            // Show the spinner when the 'Submit' button is clicked
+            document.getElementById('spinner').style.display = 'inline-block';
+
+            callLambdaFunction(document.getElementById('userInput').value);
+        }
+
+        // Detect the language of the user input
+        function detectLanguage(inputText) {
+            const chinesePattern = /[\u4e00-\u9fa5]/;
+            return chinesePattern.test(inputText) ? 'Chinese' : 'English';
+        }
+
+        function clearInput() {
+            document.getElementById('userInput').value = '';
+            document.getElementById('response').value = '';
+            document.getElementById("userInputLabel").textContent = 'User Input';
+            document.getElementById("responseLabel").textContent = 'Response';
+        }
+
+        // Detect the language of the user input as the user types
+        document.getElementById('userInput').addEventListener('input', function () {
+            const inputText = document.getElementById('userInput').value;
+            const detectedLanguage = detectLanguage(inputText);
+            document.getElementById("userInputLabel").textContent = detectedLanguage;
+        });
+    </script>
+</body>
+
+</html>
