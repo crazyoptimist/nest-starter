@@ -5,6 +5,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/aws-sdk/2.1456.0/aws-sdk.min.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
 
     <title>ChatGPT Translator</title>
     <style>
@@ -181,11 +182,59 @@
                 transform: translate(24px, 0);
             }
         }
+
+        /* Error Modal */
+        .alert-simple.alert-danger {
+
+            position: relative;
+            top: 20%;
+            left: 50%;
+            transform: translateX(-50%);
+            z-index: 9999;
+            max-width: 80%;
+            width: auto;
+            padding: 10px;
+            border: 1px solid rgba(241, 6, 6, 0.81);
+            background-color: rgba(220, 17, 1, 0.33);
+            box-shadow: 0px 0px 2px #ff0303;
+            color: #f7eded;
+            text-shadow: 2px 1px #00040a;
+            transition: 0.5s;
+            cursor: pointer;
+            border-radius: 10px;
+            overflow: hidden;
+        }
+
+        .alert-danger:hover {
+            background-color: rgba(153, 11, 1, 0.33);
+            transition: 0.5s;
+        }
+
+        .danger {
+            font-size: 18px;
+            color: #ff0303;
+            text-shadow: none;
+        }
     </style>
 </head>
 
 <body>
     <h1>ChatGPT Translator</h1>
+    <!-- Error Modal -->
+    <div class="col-sm-12" id="dangerModal" style="display: none;">
+        <div class="alert fade alert-simple alert-danger alert-dismissible text-left font__family-montserrat font__size-16 font__weight-light brk-library-rendered rendered show"
+            role="alert" data-brk-library="component__alert">
+            <button type="button" class="close font__size-18" onclick="hideError()">
+                <span aria-hidden="true">
+                    <i class="fa fa-times danger"></i>
+                </span>
+                <span class="sr-only">Close</span>
+            </button>
+            <i class="start-icon far fa-times-circle faa-pulse animated"></i>
+            <strong class="font__weight-semibold">Oh snap!</strong> <span id="errorText">Change a few things up and try
+                submitting again.</span>
+        </div>
+    </div>
     <div class="form-container">
         <!-- User Input Form -->
         <div class="form-section">
@@ -223,13 +272,13 @@
         });
 
         AWS.config.credentials.get(function (err) {
-            if (err) console.log(err);
+            if (err) showError(err);
             else console.log('Successfully retreived AWS credentials');
         });
 
         function invokeLambdaFunction(inputText) {
-            var lambda = new AWS.Lambda();
-            var params = {
+            let lambda = new AWS.Lambda();
+            let params = {
                 // Replace with your own Lambda function name
                 FunctionName: "<%= lambdaFunctionName %>",
                 Payload: JSON.stringify({ text: inputText })
@@ -238,48 +287,46 @@
             lambda.invoke(params, function (error, data) {
                 document.getElementById('spinner').style.display = 'none';
                 if (error) {
-                    console.error('AWS error: ', JSON.stringify(error));
+                    showError('AWS error: ' + JSON.stringify(error));
                     return;
                 }
                 if (data.FunctionError) {
-                    console.error("Lambda function error: ", data.Payload);
+                    showError("Lambda function error: " + data.Payload);
                     return;
                 }
                 if (data.Payload) {
-                    var response = JSON.parse(data.Payload);
+                    let response = JSON.parse(data.Payload);
                     if (response.statusCode === 200) {
-                        var translationData = response.body;
-                        document.getElementById('response').value = translationData.output;
-
-                        const detectedResponseLanguage = detectLanguage(translationData.output);
-                        document.getElementById("responseLabel").textContent = detectedResponseLanguage;
+                        document.getElementById('response').value = response.body.output;
+                        document.getElementById("userInputLabel").textContent = response.body.input_language;
+                        document.getElementById("responseLabel").textContent = response.body.output_language;
                     } else {
-                        console.log("lambda error: ", response.body)
+                        showError("lambda error: " + response.body)
                     }
                 }
             });
         }
 
-        // Detect the language of the user input and call the Lambda function
-        function callLambdaFunction(inputText) {
-            const detectedInputLanguage = detectLanguage(inputText);
-            document.getElementById("userInputLabel").textContent = detectedInputLanguage;
-
-            invokeLambdaFunction(inputText);
-        }
-
-        // Submit the user input to the Lambda function
         function handleSubmit() {
-            // Show the spinner when the 'Submit' button is clicked
             document.getElementById('spinner').style.display = 'inline-block';
-
-            callLambdaFunction(document.getElementById('userInput').value);
+            invokeLambdaFunction(document.getElementById('userInput').value);
         }
 
-        // Detect the language of the user input
-        function detectLanguage(inputText) {
-            const chinesePattern = /[\u4e00-\u9fa5]/;
-            return chinesePattern.test(inputText) ? 'Chinese' : 'English';
+        // Show error message in modal
+        function showError(message) {
+            document.getElementById('errorText').innerText = message;
+            let modal = document.getElementById('dangerModal');
+            modal.style.display = 'block';
+
+            // Hide the modal after 8 seconds
+            setTimeout(function () {
+                modal.style.display = 'none';
+            }, 8000);
+        }
+
+        function hideError() {
+            let modal = document.getElementById('dangerModal');
+            modal.style.display = 'none';
         }
 
         function clearInput() {
@@ -289,11 +336,9 @@
             document.getElementById("responseLabel").textContent = 'Response';
         }
 
-        // Detect the language of the user input as the user types
+        // Listen for changes in the user input field
         document.getElementById('userInput').addEventListener('input', function () {
             const inputText = document.getElementById('userInput').value;
-            const detectedLanguage = detectLanguage(inputText);
-            document.getElementById("userInputLabel").textContent = detectedLanguage;
         });
     </script>
 </body>
