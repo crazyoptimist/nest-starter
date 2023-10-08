@@ -30,6 +30,7 @@
     "@aws-lambda-powertools/logger": "^1.12.1",
     "@aws-sdk/client-dynamodb": "^3.321.1",
     "@aws-sdk/client-lambda": "^3.398.0",
+    "@aws-sdk/client-sns": "^3.425.0",
     "@aws-sdk/lib-dynamodb": "^3.321.1",
     "@aws-sdk/smithy-client": "^3.374.0",
     "@nest-dynamodb/typedorm": "^1.0.1",

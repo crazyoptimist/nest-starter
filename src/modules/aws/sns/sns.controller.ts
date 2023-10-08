@@ -1,25 +1,32 @@
 import { HttpService } from '@nestjs/axios';
-import { Body, Controller, Get, Post } from '@nestjs/common';
+import { Body, Controller, Get, Post, Headers } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import axios from 'axios';
 import { Logger } from '@aws-lambda-powertools/logger';
+import { SNSClient, ConfirmSubscriptionCommand } from '@aws-sdk/client-sns';
 
 @Controller('sns-endpoint')
 export class SnsController {
     private readonly logger = new Logger();
+    private readonly snsClient: SNSClient;
     constructor(
         private readonly httpService: HttpService,
         private readonly configService: ConfigService
-    ) { }
+    ) {
+        this.snsClient = new SNSClient({ region: 'us-east-2' });
+    }
 
     @Post()
-    processSNSNotification(@Body() snsMessage: any): string {
+    async processSNSNotification(@Body() snsMessage: any, @Headers() headers: any,): Promise<string> {
+
+        const messageType = headers['x-amz-sns-message-type'];
+        const topicArn = headers['x-amz-sns-topic-arn'];
         // Parse the string to a JSON object
         snsMessage = JSON.parse(snsMessage);
         this.logger.info(`Parsed SNS Message: ${JSON.stringify(snsMessage)}`);
         this.logger.info(`Parsed Message SubscribeUrl: ${JSON.stringify(snsMessage.SubscribeURL)}`);
         // validate the message type
-        if (snsMessage.Type === 'SubscriptionConfirmation') {
+        if (messageType === 'SubscriptionConfirmation') {
             // Handle SNS subscription URL callback
             // This URL should be fetched and visited to confirm the subscription.
 
@@ -29,6 +36,15 @@ export class SnsController {
             try {
                 const response = this.httpService.get(confirmationUrl);
                 this.logger.info(`Confirmed subscription with response: ${JSON.stringify(response)}`);
+
+                const params = {
+                    Token: snsMessage.Token,
+                    TopicArn: topicArn,
+                };
+
+                const data = await this.snsClient.send(new ConfirmSubscriptionCommand(params));
+                this.logger.info(`Confirmed subscription with response: ${JSON.stringify(data)}`);
+
                 return 'Subscription successful';
 
             } catch (error) {
