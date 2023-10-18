@@ -43,3 +43,4 @@ dist
 
 # Use npm, ignore yarn.lock
 yarn.lock
+*.sublime-project

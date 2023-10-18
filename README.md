@@ -127,6 +127,7 @@ MIT
 
 ## Maintainers
 
-[crazyoptimist](https://crazyoptimist.net)
+[tonytan4ever](https://github.com/tonytan4ever)
+[abdullah5abid](https://github.com/abdullah5abid)
 
 
