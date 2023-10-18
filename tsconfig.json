@@ -1,22 +1,27 @@
 {
   "compilerOptions": {
+    "target": "esnext",
     "module": "commonjs",
+    "noLib": false,
     "declaration": true,
     "noImplicitAny": false,
     "removeComments": true,
-    "noLib": false,
     "allowSyntheticDefaultImports": true,
     "emitDecoratorMetadata": true,
     "experimentalDecorators": true,
-    "target": "es2017",
     "sourceMap": true,
+    "incremental": true,
+    "skipLibCheck": true,
+    "strictNullChecks": false,
+    "strictBindCallApply": false,
+    "forceConsistentCasingInFileNames": false,
+    "noFallthroughCasesInSwitch": false,
+    "resolveJsonModule": true,
     "outDir": "./dist",
-    "baseUrl": ".",
+    "baseUrl": "./",
     "paths": {
-      "@modules/*": ["./src/modules/*"],
-      "@app/*": ["./src/*"]
+      "@app/*": ["src/*"],
+      "@modules/*": ["src/modules/*"]
     }
-  },
-  "include": ["src"],
-  "exclude": ["node_modules", "**/*.spec.ts"]
+  }
 }

@@ -1,39 +1,45 @@
-# dependencies
+# Dependencies
 node_modules/
 bin/
 
-# IDE
-/.vscode
+# IDEs and editors
 /.idea
+.project
+.classpath
+.c9/
+*.launch
+.settings/
+*.sublime-workspace
 
-# misc
+# IDE - VSCode
+.vscode/*
+!.vscode/settings.json
+!.vscode/tasks.json
+!.vscode/launch.json
+!.vscode/extensions.json
+.vscode
+
+# OS
 .DS_Store
-lerna-debug.log
-npm-debug.log
-yarn-error.log
-**/npm-debug.log
-.yarnrc.yml
-.yarn
 
-# environment
+# Logs
+logs
+*.log
+npm-debug.log*
+pnpm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+lerna-debug.log*
+
+# Dotenv
 .env
 
-# build
-/dist
+# TS build
+dist
 
-# tests
-/test
+# Tests
 /coverage
 /.nyc_output
-build/config\.gypi
 
-sqlite-example.sql
-
-# extra
-naming
-writing
-=
-
-# Mr. Developer
-*.sublime-project
-*.sublime-workspace
+# Use npm, ignore yarn.lock
+yarn.lock
