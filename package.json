@@ -31,7 +31,7 @@
     "@aws-sdk/client-dynamodb": "^3.430.0",
     "@aws-sdk/client-lambda": "^3.431.0",
     "@aws-sdk/client-sns": "^3.430.0",
-    "@aws-sdk/lib-dynamodb": "^3.321.1",
+    "@aws-sdk/lib-dynamodb": "^3.431.0",
     "@aws-sdk/smithy-client": "^3.374.0",
     "@nest-dynamodb/typedorm": "^1.0.1",
     "@nestjs/axios": "^3.0.0",
