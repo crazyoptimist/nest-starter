@@ -9,11 +9,10 @@ updates:
     directory: "/" # Location of package manifests
     target-branch: main
     schedule:
-      interval: "daily"
-      # interval: "weekly"
-      # day: "monday"
-      # time: "09:00"
-      # timezone: "America/Chicago"
+      interval: "weekly"
+      day: "monday"
+      time: "09:00"
+      timezone: "America/Chicago"
     pull-request-branch-name:
       separator: "/"
     labels:
