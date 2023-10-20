@@ -22,14 +22,15 @@ jobs:
         with:
           github-token: "${{ secrets.DEPENDABOT_GITHUB_TOKEN  }}"
 
-      - name: Approve PR
-        run: gh pr review --approve "$PR_URL"
-        env:
-          PR_URL: ${{ github.event.pull_request.html_url  }}
-          GITHUB_TOKEN: ${{ secrets.DEPENDABOT_GITHUB_TOKEN  }}
+      # DO NOT Auto Approve PR
+      # - name: Approve PR
+      #   run: gh pr review --approve "$PR_URL"
+      #   env:
+      #     PR_URL: ${{ github.event.pull_request.html_url  }}
+      #     GITHUB_TOKEN: ${{ secrets.DEPENDABOT_GITHUB_TOKEN  }}
 
-      - name: Enable auto-merge for Dependabot PRs
-        run: gh pr merge --auto --squash "$PR_URL"
-        env:
-          PR_URL: ${{github.event.pull_request.html_url}}
-          GITHUB_TOKEN: ${{secrets.DEPENDABOT_GITHUB_TOKEN}}
+      # - name: Enable auto-merge for Dependabot PRs
+      #   run: gh pr merge --auto --squash "$PR_URL"
+      #   env:
+      #     PR_URL: ${{github.event.pull_request.html_url}}
+      #     GITHUB_TOKEN: ${{secrets.DEPENDABOT_GITHUB_TOKEN}}
