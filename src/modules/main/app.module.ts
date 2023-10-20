@@ -25,6 +25,14 @@ import { AwsModule } from '@modules/aws/aws.module';
       imports: [ConfigModule],
       inject: [ConfigService],
       useFactory: (configService: ConfigService) => {
+        if (process.env.APP_ENV === 'test') {
+          return {
+            type: 'sqlite',
+            database: ':memory:',
+            entities: [User],
+            synchronize: true,
+          }
+        }
         return {
           type: configService.get('DB_TYPE'),
           host: configService.get('DB_HOST'),
