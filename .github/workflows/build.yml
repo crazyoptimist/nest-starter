@@ -1,6 +1,9 @@
 name: Build & Test
 
-on: [ push ]
+on:
+  pull_request:
+    types: [opened]
+  push:
 env:
   APP_ENV: test
   JWT_SECRET_KEY: test
