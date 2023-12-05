@@ -150,3 +150,18 @@ jobs:
               base: baseBranch,
               body: body
             });
+
+            for (const { prString } of combinedPRs) {
+              const prNumber = parseInt(prString.match(/#(\d+)/)[1], 10);
+              try {
+                  await github.rest.pulls.update({
+                      owner: context.repo.owner,
+                      repo: context.repo.repo,
+                      pull_number: prNumber,
+                      state: 'closed'
+                  });
+                  console.log(`Closed PR #${prNumber}`);
+              } catch (error) {
+                  console.error(`Failed to close PR #${prNumber}: ${error}`);
+              }
+            }
