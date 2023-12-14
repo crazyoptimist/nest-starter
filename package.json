@@ -29,6 +29,7 @@
   },
   "dependencies": {
     "@aws-lambda-powertools/logger": "^1.14.0",
+    "@aws-sdk/client-cost-explorer": "^3.470.0",
     "@aws-sdk/client-dynamodb": "^3.438.0",
     "@aws-sdk/client-lambda": "^3.431.0",
     "@aws-sdk/client-sns": "^3.438.0",
@@ -44,6 +45,7 @@
     "@nestjs/platform-express": "^9.4.3",
     "@nestjs/swagger": "^6.3.0",
     "@nestjs/typeorm": "^9.0.1",
+    "@smithy/smithy-client": "^2.1.18",
     "@typedorm/common": "^1.15.4",
     "@typedorm/core": "^1.15.4",
     "@vendia/serverless-express": "^4.10.1",
@@ -55,6 +57,7 @@
     "dotenv": "^16.3.1",
     "ejs": "^3.1.9",
     "lint-staged": "^13.3.0",
+    "luxon": "^3.4.4",
     "module-alias": "^2.2.3",
     "passport": "^0.6.0",
     "passport-jwt": "^4.0.1",
