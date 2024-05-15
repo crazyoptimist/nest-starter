@@ -1,10 +1,11 @@
-version: "3"
+name: "nest-starter"
+
 services:
-  nest:
-    build:
-      context: .
-      dockerfile: deployments/prod.Dockerfile
+  api:
     image: nest
+    build:
+      context: ../
+      dockerfile: deployments/prod.Dockerfile
     container_name: nest
     ports:
       - 3000:3000

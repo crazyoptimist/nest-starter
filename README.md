@@ -21,13 +21,13 @@ Build a modular REST API with NestJS framework.
 
 ## What is this?
 
-This is a NestJS RESTful API starter with JWT auth, Open API 3 documentation, TypeORM integrated.
+This is a NestJS RESTful API starter that includes JWT authentication, OpenAPI 3 documentation, and TypeORM integration.
 
-Why am I maintianing this? By using this template, you will be able to spin up a production-ready RESTful API super fast, writing very little boilerplate code.
+The reason I maintain it is because using this template allows you to quickly set up a production-ready RESTful API with minimal boilerplate code.
 
 ## Getting started
 
-Create dotenv file and fill out with proper values
+Create a dotenv file and fill it out with the appropriate values.
 
 ```bash
 cp .env.example .env
@@ -49,13 +49,13 @@ HMR(Hot Module Reload) is configured with webpack.
 
 ## DB Migrations
 
-If you don't need incremental database migrations, set `DB_SYNC` env variable to `true`, which will keep syncing the database structure with the schema defined in the code base.
+If you don't require incremental database migrations, set the DB_SYNC environment variable to true. This will continuously synchronize the database structure with the schema defined in the codebase.
 
-**Do NOT set `DB_SYNC` to `true` in production. You may lose production data if you do!**
+__However, DO NOT set DB_SYNC to true in a production environment, as doing so may result in data loss!__
 
-### Generate a Migration
+#### Generate a New Migration
 
-Make sure to use `npm` for commands follow, because `yarn` does not support `$npm_config_name`.
+Make sure to use npm for the following commands, as yarn does not support `$npm_config_name`.
 
 ```bash
 npm run migration:generate --name=AddAgeColumnToUser
@@ -67,15 +67,15 @@ Or with docker:
 docker exec -it nest npm run migration:generate --name=AddAgeColumnToUser
 ```
 
-Migration files are placed under `src/migrations`.
+Migration files located placed in the `src/migrations` directory.
 
-### Run Pending Migrations
+#### Run Pending Migrations
 
 ```bash
 npm run migration:run
 ```
 
-### Revert a Migration
+#### Revert Migrations
 
 Revert the last migration
 
@@ -87,13 +87,13 @@ npm run migration:revert
 
 ```bash
 # unit tests
-yarn test
+npm run test
 
 # e2e tests
-yarn test:e2e
+npm run test:e2e
 
 # test coverage
-yarn test:cov
+npm run test:cov
 ```
 
 ## Environment Configuration
@@ -106,9 +106,7 @@ OpenAPI 3.0 is configured, and the API docs is hosted at `BASE_URL/api/docs`.
 
 ## Authentication
 
-JWT authentication is configured.
-
-It would be greater to change the current password hashing to something more secure.
+JWT authentication has been configured.
 
 ## License
 
