@@ -6,6 +6,7 @@ import { ConfigService } from '@nestjs/config';
 import { UsersService } from '@modules/user/user.service';
 import { User } from '@modules/user/user.entity';
 import { SigninDto } from './dto/signin.dto';
+import { JwtPayload } from './jwt/jwt.strategy';
 
 @Injectable()
 export class AuthService {
@@ -16,18 +17,28 @@ export class AuthService {
   ) {}
 
   async createToken(user: User) {
+    const payload: JwtPayload = {
+      sub: user.id,
+    };
+
     return {
-      expiresIn: this.configService.get('JWT_EXPIRATION_TIME'),
-      accessToken: this.jwtService.sign({ id: user.id }),
+      expiresIn: this.configService.get('ACCESS_TOKEN_EXPIRATION'),
+      accessToken: this.jwtService.sign(payload),
       user,
     };
   }
 
-  async validateUser(signinDto: SigninDto): Promise<any> {
+  async validateUser(signinDto: SigninDto): Promise<User> {
     const user = await this.userService.getByEmail(signinDto.email);
-    if (!user || !Hash.compare(signinDto.password, user.password)) {
-      throw new UnauthorizedException('Invalid credentials!');
+
+    if (!user) {
+      throw new UnauthorizedException('User not found.');
     }
+
+    if (!Hash.compare(signinDto.password, user.password)) {
+      throw new UnauthorizedException('Wrong password.');
+    }
+
     return user;
   }
 }
