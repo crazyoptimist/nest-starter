@@ -7,10 +7,10 @@ import {
   Request,
 } from '@nestjs/common';
 import { ApiResponse, ApiTags, ApiBearerAuth } from '@nestjs/swagger';
-import { AuthGuard } from '@nestjs/passport';
 import { AuthService } from './auth.service';
 import { SigninDto } from './dto/signin.dto';
 import { SignupDto } from './dto/signup.dto';
+import { JwtAuthGuard } from './passport/jwt.guard';
 import { UsersService } from '@modules/user/user.service';
 import { IRequest } from '@modules/user/user.interface';
 
@@ -22,11 +22,11 @@ export class AuthController {
     private readonly userService: UsersService,
   ) {}
 
-  @Post('signin')
+  @Post('login')
   @ApiResponse({ status: 201, description: 'Successful Login' })
   @ApiResponse({ status: 400, description: 'Bad Request' })
   @ApiResponse({ status: 401, description: 'Unauthorized' })
-  async signin(@Body() signinDto: SigninDto): Promise<any> {
+  async login(@Body() signinDto: SigninDto): Promise<any> {
     const user = await this.authService.validateUser(signinDto);
     return await this.authService.createToken(user);
   }
@@ -41,7 +41,7 @@ export class AuthController {
   }
 
   @ApiBearerAuth()
-  @UseGuards(AuthGuard())
+  @UseGuards(JwtAuthGuard)
   @Get('me')
   @ApiResponse({ status: 200, description: 'Successful Response' })
   @ApiResponse({ status: 401, description: 'Unauthorized' })

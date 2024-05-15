@@ -1,4 +1,4 @@
-import { Injectable, NotAcceptableException } from '@nestjs/common';
+import { ConflictException, Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 
@@ -12,13 +12,13 @@ export class UsersService {
     private readonly userRepository: Repository<User>,
   ) {}
 
-  async get(id: number) {
+  async findOne(id: number) {
     return this.userRepository.findOne({
       where: { id },
     });
   }
 
-  async getByEmail(email: string) {
+  async findByEmail(email: string) {
     return await this.userRepository
       .createQueryBuilder('users')
       .where('users.email = :email')
@@ -27,11 +27,11 @@ export class UsersService {
   }
 
   async create(signupDto: SignupDto) {
-    const user = await this.getByEmail(signupDto.email);
+    const user = await this.findByEmail(signupDto.email);
 
     if (user) {
-      throw new NotAcceptableException(
-        'User with provided email already exists.',
+      throw new ConflictException(
+        'A user with the provided email already exists.',
       );
     }
 
