@@ -3,7 +3,7 @@ import { JwtService } from '@nestjs/jwt';
 import { ConfigService } from '@nestjs/config';
 
 import { Hash } from '@app/utils/hash.util';
-import { UsersService } from '@modules/user/user.service';
+import { UserService } from '@modules/user/user.service';
 import { IUser } from '@modules/user/user.interface';
 import { SigninDto } from './dto/signin.dto';
 import { JwtPayload } from './passport/jwt.strategy';
@@ -13,7 +13,7 @@ export class AuthService {
   constructor(
     private readonly jwtService: JwtService,
     private readonly configService: ConfigService,
-    private readonly userService: UsersService,
+    private readonly userService: UserService,
   ) {}
 
   async validateUser(signinDto: SigninDto): Promise<IUser> {

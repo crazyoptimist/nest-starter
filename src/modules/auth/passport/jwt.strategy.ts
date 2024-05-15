@@ -19,7 +19,9 @@ export class JwtStrategy extends PassportStrategy(Strategy) {
     });
   }
 
+  // This function should return a user object,
+  // which will then be injected into the request object by Nest.
   async validate({ sub }: JwtPayload) {
-    return { userId: sub };
+    return { id: sub };
   }
 }
