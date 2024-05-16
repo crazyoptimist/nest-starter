@@ -6,12 +6,18 @@ import {
   Get,
   Patch,
   Delete,
+  Query,
 } from '@nestjs/common';
 import { ApiResponse, ApiTags, ApiBearerAuth } from '@nestjs/swagger';
 import { UserService } from './user.service';
 import { SignupDto } from '../auth/dto/signup.dto';
 import { IUser } from './user.interface';
 import { UpdateUserDto } from './user.dto';
+import {
+  getFilterParams,
+  getPaginationParam,
+  getSortParams,
+} from '@app/utils/query-param.util';
 
 @Controller('api/users')
 @ApiTags('users')
@@ -31,7 +37,10 @@ export class UserController {
   @ApiBearerAuth()
   @ApiResponse({ status: 200, description: 'All Users' })
   @ApiResponse({ status: 401, description: 'Unauthorized' })
-  async findAll(): Promise<Array<IUser>> {
+  async findAll(@Query() query: Object): Promise<Array<IUser>> {
+    const paginationParam = getPaginationParam(query);
+    const sortParams = getSortParams(query);
+    const filterParams = getFilterParams(query);
     return this.userService.findAll();
   }
 

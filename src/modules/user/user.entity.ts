@@ -24,13 +24,13 @@ export class User {
   @PrimaryGeneratedColumn()
   id: number;
 
-  @Column({ length: 255 })
+  @Column({ name: 'first_name', length: 255 })
   firstName: string;
 
-  @Column({ length: 255 })
+  @Column({ name: 'last_name', length: 255 })
   lastName: string;
 
-  @Column({ length: 255 })
+  @Column({ name: 'email', length: 255 })
   email: string;
 
   @Column({
