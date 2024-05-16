@@ -7,10 +7,10 @@ import {
   Patch,
   Delete,
   Query,
-  Response,
+  Res,
 } from '@nestjs/common';
 import { ApiResponse, ApiTags, ApiBearerAuth } from '@nestjs/swagger';
-import { Response as ExpressResponse } from 'express';
+import { Response } from 'express';
 import { UserService } from './user.service';
 import { SignupDto } from '../auth/dto/signup.dto';
 import { IUser } from './user.interface';
@@ -20,6 +20,7 @@ import {
   getPaginationParam,
   getSortParams,
 } from '@app/utils/query-param.util';
+import { TOTAL_COUNT_HEADER_KEY } from '@app/constants';
 
 @Controller('api/users')
 @ApiTags('users')
@@ -41,7 +42,7 @@ export class UserController {
   @ApiResponse({ status: 401, description: 'Unauthorized' })
   async findAll(
     @Query() query: Object,
-    @Response() res: ExpressResponse,
+    @Res({ passthrough: true }) res: Response,
   ): Promise<Array<IUser>> {
     const paginationParam = getPaginationParam(query);
     const sortParams = getSortParams(query);
@@ -53,7 +54,7 @@ export class UserController {
       filterParams,
     );
 
-    res.set('X-Total-Count', totalCount.toString());
+    res.set(TOTAL_COUNT_HEADER_KEY, totalCount.toString());
 
     return users;
   }

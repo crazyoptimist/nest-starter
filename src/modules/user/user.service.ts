@@ -45,10 +45,35 @@ export class UserService {
 
     for (const filterParam of filterParams) {
       if (filterParam.fieldName === 'email') {
-        //
+        query.andWhere('email = :email', {
+          email: filterParam.value,
+        });
+      }
+      if (filterParam.fieldName === 'firstName') {
+        query.andWhere('first_name = :firstName', {
+          firstName: filterParam.value,
+        });
+      }
+      if (filterParam.fieldName === 'lastName') {
+        query.andWhere('last_name = :lastName', {
+          lastName: filterParam.value,
+        });
       }
     }
+
     const totalCount = await query.getCount();
+
+    for (const sortParam of sortParams) {
+      if (sortParam.fieldName === 'email') {
+        query.addOrderBy('email', sortParam.order);
+      }
+      if (sortParam.fieldName === 'firstName') {
+        query.addOrderBy('first_name', sortParam.order);
+      }
+      if (sortParam.fieldName === 'lastName') {
+        query.addOrderBy('last_name', sortParam.order);
+      }
+    }
 
     query = query.offset(paginationParam.offset).limit(paginationParam.limit);
 
