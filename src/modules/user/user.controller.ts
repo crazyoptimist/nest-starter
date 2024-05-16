@@ -7,8 +7,10 @@ import {
   Patch,
   Delete,
   Query,
+  Response,
 } from '@nestjs/common';
 import { ApiResponse, ApiTags, ApiBearerAuth } from '@nestjs/swagger';
+import { Response as ExpressResponse } from 'express';
 import { UserService } from './user.service';
 import { SignupDto } from '../auth/dto/signup.dto';
 import { IUser } from './user.interface';
@@ -37,11 +39,23 @@ export class UserController {
   @ApiBearerAuth()
   @ApiResponse({ status: 200, description: 'All Users' })
   @ApiResponse({ status: 401, description: 'Unauthorized' })
-  async findAll(@Query() query: Object): Promise<Array<IUser>> {
+  async findAll(
+    @Query() query: Object,
+    @Response() res: ExpressResponse,
+  ): Promise<Array<IUser>> {
     const paginationParam = getPaginationParam(query);
     const sortParams = getSortParams(query);
     const filterParams = getFilterParams(query);
-    return this.userService.findAll();
+
+    const { users, totalCount } = await this.userService.findAll(
+      paginationParam,
+      sortParams,
+      filterParams,
+    );
+
+    res.set('X-Total-Count', totalCount.toString());
+
+    return users;
   }
 
   @Get(':id')

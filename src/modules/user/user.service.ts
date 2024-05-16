@@ -4,10 +4,15 @@ import {
   NotFoundException,
 } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Repository } from 'typeorm';
+import { Repository, SelectQueryBuilder } from 'typeorm';
 import { User } from './user.entity';
 import { SignupDto } from '@modules/auth/dto/signup.dto';
 import { UpdateUserDto } from './user.dto';
+import {
+  FilterParam,
+  PaginationParam,
+  SortParam,
+} from '@app/utils/query-param.util';
 
 @Injectable()
 export class UserService {
@@ -30,8 +35,26 @@ export class UserService {
     );
   }
 
-  async findAll() {
-    return await this.userRepository.find();
+  async findAll(
+    paginationParam: PaginationParam,
+    sortParams: SortParam[],
+    filterParams: FilterParam[],
+  ): Promise<{ users: User[]; totalCount: number }> {
+    let query: SelectQueryBuilder<User> =
+      this.userRepository.createQueryBuilder('users');
+
+    for (const filterParam of filterParams) {
+      if (filterParam.fieldName === 'email') {
+        //
+      }
+    }
+    const totalCount = await query.getCount();
+
+    query = query.offset(paginationParam.offset).limit(paginationParam.limit);
+
+    const users = await query.getMany();
+
+    return { users, totalCount };
   }
 
   async findOne(id: number) {
