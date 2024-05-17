@@ -16,14 +16,11 @@ import { AuthController } from './auth.controller';
     JwtModule.registerAsync({
       imports: [ConfigModule],
       useFactory: async (configService: ConfigService) => {
-        let expiresIn = configService.get('ACCESS_TOKEN_EXPIRATION');
-        if (!expiresIn) {
-          expiresIn = '900s'; // 15 minutes by default
-        }
-
         return {
           secret: configService.get('ACCESS_TOKEN_SECRET'),
-          signOptions: { expiresIn },
+          signOptions: {
+            expiresIn: configService.get('ACCESS_TOKEN_EXPIRATION'),
+          },
         };
       },
       inject: [ConfigService],

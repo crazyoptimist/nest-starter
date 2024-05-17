@@ -7,6 +7,39 @@ services:
       context: ../
       dockerfile: deployments/prod.Dockerfile
     container_name: nest
+    environment:
+      - ACCESS_TOKEN_SECRET=${ACCESS_TOKEN_SECRET}
+      - ACCESS_TOKEN_EXPIRATION=${ACCESS_TOKEN_EXPIRATION}
+      - DB_HOST=postgresql
+      - DB_USERNAME=${DB_USERNAME}
+      - DB_PASSWORD=${DB_PASSWORD}
+      - DB_DATABASE=${DB_DATABASE}
+      - DB_SYNC=false
     ports:
-      - 3000:3000
+      - 8080:8080
+    <<: &default_logging
+      logging:
+        driver: "json-file"
+        options:
+          max-size: "200k"
+          max-file: "10"
     restart: unless-stopped
+    depends_on:
+      - postgresql
+
+  postgresql:
+    image: postgres:16
+    container_name: postgresql
+    environment:
+      - POSTGRES_USER=${DB_USERNAME}
+      - POSTGRES_PASSWORD=${DB_PASSWORD}
+      - POSTGRES_DB=${DB_DATABASE}
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    <<: *default_logging
+    restart: unless-stopped
+
+volumes:
+  postgres_data:

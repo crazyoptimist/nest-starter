@@ -7,11 +7,9 @@ import { useContainer } from 'class-validator';
 import { AppModule } from './modules/main/app.module';
 import { setupSwagger } from './swagger';
 import { TrimStringsPipe } from './modules/common/pipe/trim-strings.pipe';
-import { TOTAL_COUNT_HEADER_KEY } from './constants';
+import { APP_PORT, TOTAL_COUNT_HEADER_KEY } from './constants';
 
 declare const module: any;
-
-const APP_PORT = 3000;
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);

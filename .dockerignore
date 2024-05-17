@@ -5,7 +5,7 @@ deployments
 dist
 node_modules
 test
-.env.example
+.env*
 .eslint*
 .gitignore
 .prettier*

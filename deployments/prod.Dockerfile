@@ -40,7 +40,7 @@ COPY --from=build /app .
 ENV NODE_ENV production
 
 # Expose the port that the application listens on
-EXPOSE 3000
+EXPOSE 8080
 
 # Set a non-root user to run the application
 USER node
