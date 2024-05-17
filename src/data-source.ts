@@ -7,7 +7,7 @@ const { DB_TYPE, DB_HOST, DB_USERNAME, DB_PASSWORD, DB_PORT, DB_DATABASE } =
   process.env;
 
 export default new DataSource({
-  type: DB_TYPE,
+  type: DB_TYPE || 'postgres',
   host: DB_HOST,
   port: Number(DB_PORT),
   username: DB_USERNAME,
