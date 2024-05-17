@@ -6,12 +6,12 @@ Build a modular REST API with NestJS framework.
 
 ## Table of Contents
 
-- [What is this?](#what-is-this)
-- [Getting started](#getting-started)
-- [DB Migrations](#db-migrations)
-  - [Generate a Migration](#generate-a-migration)
+- [What Is This?](#what-is-this)
+- [Getting Started](#getting-started)
+- [Database Migrations](#database-migrations)
+  - [Generate a New Migration](#generate-a-new-migration)
   - [Run Pending Migrations](#run-pending-migrations)
-  - [Revert a Migration](#revert-a-migration)
+  - [Revert Migrations](#revert-migrations)
 - [Tests](#tests)
 - [Environment Configuration](#environment-configuration)
 - [API Documentation](#api-documentation)
@@ -19,13 +19,13 @@ Build a modular REST API with NestJS framework.
 - [License](#license)
 - [Maintainers](#maintainers)
 
-## What is this?
+## What Is This?
 
 This is a NestJS RESTful API starter that includes JWT authentication, OpenAPI 3 documentation, and TypeORM integration.
 
 The reason I maintain it is because using this template allows you to quickly set up a production-ready RESTful API with minimal boilerplate code.
 
-## Getting started
+## Getting Started
 
 Create a dotenv file and fill it out with the appropriate values.
 
@@ -47,7 +47,7 @@ npm run dev
 
 HMR(Hot Module Reload) is configured with webpack.
 
-## DB Migrations
+## Database Migrations
 
 If you don't require incremental database migrations, set the DB_SYNC environment variable to true. This will continuously synchronize the database structure with the schema defined in the codebase.
 
@@ -61,18 +61,18 @@ Make sure to use npm for the following commands, as yarn does not support `$npm_
 npm run migration:generate --name=AddAgeColumnToUser
 ```
 
-Or with docker:
-
-```bash
-docker exec -it nest npm run migration:generate --name=AddAgeColumnToUser
-```
-
-Migration files located placed in the `src/migrations` directory.
+Migration files are located in the `src/migrations` directory.
 
 #### Run Pending Migrations
 
 ```bash
 npm run migration:run
+```
+
+Using Docker:
+
+```bash
+docker exec nest npm run migration:run
 ```
 
 #### Revert Migrations
@@ -98,11 +98,11 @@ npm run test:cov
 
 ## Environment Configuration
 
-`@nestjs/config` is used, so you can just inject `ConfigService` to read environment variables from the dotenv file.
+`@nestjs/config` has been used, so you can just inject `ConfigService` to read environment variables from the dotenv file.
 
 ## API Documentation
 
-OpenAPI 3.0 is configured, and the API docs is hosted at `BASE_URL/api/docs`.
+OpenAPI 3.0 has been configured, and the API documentation is hosted at `BASE_URL/api/docs`.
 
 ## Authentication
 
