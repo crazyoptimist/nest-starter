@@ -92,10 +92,19 @@ export function getFilterParams(queryObject: Object): FilterParam[] {
       continue;
     }
 
-    result.push({
-      fieldName: key,
-      value,
-    });
+    if (typeof value === 'object' && value.length > 0) {
+      for (const item of value) {
+        result.push({
+          fieldName: key,
+          value: item,
+        });
+      }
+    } else {
+      result.push({
+        fieldName: key,
+        value,
+      });
+    }
   }
 
   return result;
