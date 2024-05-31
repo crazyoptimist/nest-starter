@@ -30,7 +30,7 @@ export class User {
   @Column({ name: 'last_name', length: 255 })
   lastName: string;
 
-  @Column({ name: 'email', length: 255 })
+  @Column({ name: 'email', unique: true, length: 255 })
   email: string;
 
   @Column({

@@ -11,9 +11,6 @@ import { AuthModule } from '@modules/auth/auth.module';
 import { JwtAuthGuard } from '@modules/auth/passport/jwt.guard';
 import { CommonModule } from '@modules/common/common.module';
 
-// TypeORM Entities
-import { User } from '@modules/user/user.entity';
-
 @Module({
   imports: [
     ConfigModule.forRoot({
@@ -41,8 +38,8 @@ import { User } from '@modules/user/user.entity';
           username: configService.get('DB_USERNAME'),
           password: configService.get('DB_PASSWORD'),
           database: configService.get('DB_DATABASE'),
-          entities: [User],
           synchronize: configService.get('DB_SYNC'),
+          autoLoadEntities: true,
           keepConnectionAlive: true,
         } as TypeOrmModuleAsyncOptions;
       },
