@@ -14,6 +14,7 @@ import { AuthModule } from '@modules/auth/auth.module';
 import { JwtAuthGuard } from '@modules/auth/passport/jwt.guard';
 import { CommonModule } from '@modules/common/common.module';
 import { UserModule } from '@modules/user/user.module';
+import { CaslModule } from '@modules/infrastructure/casl/casl.module';
 
 @Module({
   imports: [
@@ -66,6 +67,7 @@ import { UserModule } from '@modules/user/user.module';
     CommonModule,
     UserModule,
     AuthModule,
+    CaslModule,
   ],
   controllers: [AppController],
   providers: [

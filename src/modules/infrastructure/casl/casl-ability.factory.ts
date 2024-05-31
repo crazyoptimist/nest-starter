@@ -8,6 +8,7 @@ import {
 import { Injectable } from '@nestjs/common';
 import { Action } from './action.enum';
 import { User } from '@app/modules/user/user.entity';
+import { RoleEnum } from '@app/modules/user/role.entity';
 
 type Subjects = InferSubjects<typeof User | User> | 'all';
 
@@ -20,7 +21,12 @@ export class CaslAbilityFactory {
       PureAbility as AbilityClass<AppAbility>,
     );
 
-    // TODO: Build abilities
+    const userRoles = user.roles.map((item) => item.name);
+
+    // Build it precisely :)
+    if (userRoles.includes(RoleEnum.Admin)) {
+      can(Action.Manage, 'all');
+    }
 
     return build({
       detectSubjectType: (subject) =>
