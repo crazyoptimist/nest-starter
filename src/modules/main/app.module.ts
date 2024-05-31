@@ -3,13 +3,17 @@ import { TypeOrmModule, TypeOrmModuleAsyncOptions } from '@nestjs/typeorm';
 import 'reflect-metadata';
 import { APP_GUARD } from '@nestjs/core';
 import * as Joi from 'joi';
+import { ConfigModule, ConfigService } from '@nestjs/config';
+import { CacheModule } from '@nestjs/cache-manager';
+import { RedisClientOptions } from 'redis';
+import { redisStore } from 'cache-manager-redis-yet';
 
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
-import { ConfigModule, ConfigService } from '@nestjs/config';
 import { AuthModule } from '@modules/auth/auth.module';
 import { JwtAuthGuard } from '@modules/auth/passport/jwt.guard';
 import { CommonModule } from '@modules/common/common.module';
+import { UserModule } from '@modules/user/user.module';
 
 @Module({
   imports: [
@@ -25,6 +29,8 @@ import { CommonModule } from '@modules/common/common.module';
         DB_PASSWORD: Joi.string().required(),
         DB_DATABASE: Joi.string().required(),
         DB_SYNC: Joi.boolean().default(false),
+        REDIS_HOST: Joi.string().hostname().required(),
+        REDIS_PORT: Joi.number().integer().min(1).max(65535).default(6379),
       }),
     }),
     TypeOrmModule.forRootAsync({
@@ -44,7 +50,21 @@ import { CommonModule } from '@modules/common/common.module';
         } as TypeOrmModuleAsyncOptions;
       },
     }),
+    CacheModule.registerAsync<RedisClientOptions>({
+      imports: [ConfigModule],
+      inject: [ConfigService],
+      useFactory: async (configService: ConfigService) => ({
+        store: await redisStore({
+          socket: {
+            host: configService.get('REDIS_HOST'),
+            port: configService.get('REDIS_PORT'),
+          },
+        }),
+      }),
+      isGlobal: true,
+    }),
     CommonModule,
+    UserModule,
     AuthModule,
   ],
   controllers: [AppController],
