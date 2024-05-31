@@ -4,15 +4,21 @@ import {
   PrimaryGeneratedColumn,
   CreateDateColumn,
   UpdateDateColumn,
+  ManyToMany,
+  JoinTable,
 } from 'typeorm';
 import { Exclude } from 'class-transformer';
 
 import { PasswordTransformer } from '../common/transformer/password.transformer';
+import { Role } from './role.entity';
 
 @Entity({
   name: 'users',
 })
 export class User {
+  @PrimaryGeneratedColumn()
+  id: number;
+
   @CreateDateColumn()
   @Exclude()
   created_at: Date;
@@ -20,9 +26,6 @@ export class User {
   @UpdateDateColumn()
   @Exclude()
   updated_at: Date;
-
-  @PrimaryGeneratedColumn()
-  id: number;
 
   @Column({ name: 'first_name', length: 255 })
   firstName: string;
@@ -40,4 +43,16 @@ export class User {
   })
   @Exclude()
   password: string;
+
+  @ManyToMany(() => Role, { eager: true })
+  @JoinTable({
+    name: 'users_roles',
+    joinColumn: {
+      name: 'user_id',
+    },
+    inverseJoinColumn: {
+      name: 'role_id',
+    },
+  })
+  roles: Role[];
 }

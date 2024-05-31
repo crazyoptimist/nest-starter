@@ -8,6 +8,7 @@ import {
   Delete,
   Query,
   Res,
+  UseGuards,
 } from '@nestjs/common';
 import { ApiResponse, ApiTags, ApiBearerAuth } from '@nestjs/swagger';
 import { Response } from 'express';
@@ -21,6 +22,10 @@ import {
   getSortParams,
 } from '@app/utils/query-param.util';
 import { TOTAL_COUNT_HEADER_KEY } from '@app/constants';
+import { PoliciesGuard } from '../infrastructure/casl/policies.guard';
+import { CheckPolicies } from '../infrastructure/casl/check-policies.decorator';
+import { Action } from '../infrastructure/casl/action.enum';
+import { User } from './user.entity';
 
 @Controller('api/users')
 @ApiTags('users')
@@ -28,6 +33,8 @@ export class UserController {
   constructor(private readonly userService: UserService) {}
 
   @Post()
+  @UseGuards(PoliciesGuard)
+  @CheckPolicies((ability) => ability.can(Action.Create, User))
   @ApiBearerAuth()
   @ApiResponse({ status: 201, description: 'New User Created' })
   @ApiResponse({ status: 400, description: 'Bad Request' })
@@ -37,6 +44,8 @@ export class UserController {
   }
 
   @Get()
+  @UseGuards(PoliciesGuard)
+  @CheckPolicies((ability) => ability.can(Action.Read, User))
   @ApiBearerAuth()
   @ApiResponse({ status: 200, description: 'All Users' })
   @ApiResponse({ status: 401, description: 'Unauthorized' })
@@ -60,6 +69,8 @@ export class UserController {
   }
 
   @Get(':id')
+  @UseGuards(PoliciesGuard)
+  @CheckPolicies((ability) => ability.can(Action.Read, User))
   @ApiBearerAuth()
   @ApiResponse({ status: 200, description: 'User For Given ID' })
   @ApiResponse({ status: 401, description: 'Unauthorized' })
@@ -69,6 +80,8 @@ export class UserController {
   }
 
   @Patch(':id')
+  @UseGuards(PoliciesGuard)
+  @CheckPolicies((ability) => ability.can(Action.Update, User))
   @ApiBearerAuth()
   @ApiResponse({ status: 200, description: 'Successful Update' })
   @ApiResponse({ status: 400, description: 'Bad Request' })
@@ -82,6 +95,8 @@ export class UserController {
   }
 
   @Delete(':id')
+  @UseGuards(PoliciesGuard)
+  @CheckPolicies((ability) => ability.can(Action.Delete, User))
   @ApiBearerAuth()
   @ApiResponse({ status: 200, description: 'Successful Delete' })
   @ApiResponse({ status: 400, description: 'Bad Request' })
