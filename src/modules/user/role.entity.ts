@@ -1,10 +1,12 @@
 import { Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
+import { Exclude } from 'class-transformer';
 
 @Entity({
   name: 'roles',
 })
 export class Role {
   @PrimaryGeneratedColumn()
+  @Exclude()
   id: number;
 
   @Column({ length: 50 })

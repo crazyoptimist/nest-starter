@@ -4,7 +4,7 @@ import {
   NotFoundException,
 } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Repository, SelectQueryBuilder } from 'typeorm';
+import { In, Repository, SelectQueryBuilder } from 'typeorm';
 import { User } from './user.entity';
 import { SignupDto } from '@modules/auth/dto/signup.dto';
 import { UpdateUserDto } from './user.dto';
@@ -13,12 +13,15 @@ import {
   PaginationParam,
   SortParam,
 } from '@app/utils/query-param.util';
+import { Role } from './role.entity';
 
 @Injectable()
 export class UserService {
   constructor(
     @InjectRepository(User)
     private readonly userRepository: Repository<User>,
+    @InjectRepository(Role)
+    private readonly roleRepository: Repository<Role>,
   ) {}
 
   async create(signupDto: SignupDto) {
@@ -107,7 +110,33 @@ export class UserService {
   }
 
   async update(id: number, dto: UpdateUserDto) {
-    return await this.userRepository.update(id, dto);
+    const isUserExists = await this.userRepository.exists({ where: { id } });
+    if (!isUserExists) {
+      throw new NotFoundException();
+    }
+
+    let { roles: roleNames, ...partialEntity } = dto;
+
+    let roles: Role[] = [];
+    if (dto.roles && dto.roles.length > 0) {
+      roles = await this.roleRepository.findBy({
+        name: In(roleNames),
+      });
+    }
+
+    const updateDto =
+      roles.length > 0
+        ? {
+            ...partialEntity,
+            roles,
+            id,
+          }
+        : {
+            ...partialEntity,
+            id,
+          };
+
+    return await this.userRepository.save(updateDto);
   }
 
   async delete(id: number) {
