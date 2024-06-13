@@ -1,6 +1,6 @@
 import 'source-map-support/register';
 
-import { NestFactory, Reflector } from '@nestjs/core';
+import { HttpAdapterHost, NestFactory, Reflector } from '@nestjs/core';
 import { ClassSerializerInterceptor, ValidationPipe } from '@nestjs/common';
 import { useContainer } from 'class-validator';
 
@@ -8,6 +8,7 @@ import { AppModule } from './modules/main/app.module';
 import { setupSwagger } from './swagger';
 import { TrimStringsPipe } from './modules/common/pipe/trim-strings.pipe';
 import { APP_PORT, TOTAL_COUNT_HEADER_KEY } from './constants';
+import { AllExceptionsFilter } from './modules/common/exception-filter/all-exceptions.filter';
 
 declare const module: any;
 
@@ -28,6 +29,9 @@ async function bootstrap() {
   app.useGlobalInterceptors(new ClassSerializerInterceptor(app.get(Reflector)));
 
   useContainer(app.select(AppModule), { fallbackOnErrors: true });
+
+  const httpAdapter = app.get(HttpAdapterHost);
+  app.useGlobalFilters(new AllExceptionsFilter(httpAdapter));
 
   await app.listen(APP_PORT);
 
