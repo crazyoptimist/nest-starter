@@ -4,9 +4,10 @@ import {
   ArgumentsHost,
   HttpException,
   HttpStatus,
+  Logger,
 } from '@nestjs/common';
 import { HttpAdapterHost } from '@nestjs/core';
-import { QueryFailedError } from 'typeorm';
+import { EntityNotFoundError, QueryFailedError } from 'typeorm';
 
 type ResponseBody = {
   statusCode: number;
@@ -16,6 +17,8 @@ type ResponseBody = {
 
 @Catch()
 export class AllExceptionsFilter implements ExceptionFilter {
+  private readonly logger = new Logger(AllExceptionsFilter.name);
+
   constructor(private readonly httpAdapterHost: HttpAdapterHost) {}
 
   catch(exception: unknown, host: ArgumentsHost): void {
@@ -39,7 +42,15 @@ export class AllExceptionsFilter implements ExceptionFilter {
         message: exception.message,
         error: 'Database Query Failed Error',
       };
+    } else if (exception instanceof EntityNotFoundError) {
+      statusCode = HttpStatus.NOT_FOUND;
+      responseBody = {
+        statusCode,
+        message: exception.message,
+        error: 'Record Not Found Error',
+      };
     } else {
+      this.logger.error(exception);
       statusCode = HttpStatus.INTERNAL_SERVER_ERROR;
       responseBody = {
         statusCode,
