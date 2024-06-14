@@ -23,6 +23,8 @@ import { CaslModule } from '@modules/infrastructure/casl/casl.module';
       validationSchema: Joi.object({
         ACCESS_TOKEN_SECRET: Joi.string().min(16).required(),
         ACCESS_TOKEN_EXPIRATION: Joi.string().alphanum().default('900s'),
+        REFRESH_TOKEN_SECRET: Joi.string().min(16).required(),
+        REFRESH_TOKEN_EXPIRATION: Joi.string().alphanum().default('86400s'),
         DB_TYPE: Joi.string().valid('postgres', 'mysql').default('postgres'),
         DB_HOST: Joi.string().hostname().required(),
         DB_PORT: Joi.number().integer().min(1).max(65535).default(5432),

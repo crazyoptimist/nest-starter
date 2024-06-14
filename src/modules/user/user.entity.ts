@@ -44,6 +44,15 @@ export class User {
   @Exclude()
   password: string;
 
+  @Column({
+    name: 'refresh_token',
+    length: 255,
+    transformer: new PasswordTransformer(),
+    nullable: true,
+  })
+  @Exclude()
+  refreshToken: string;
+
   @ManyToMany(() => Role, { eager: true })
   @JoinTable({
     name: 'users_roles',
