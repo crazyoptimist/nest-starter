@@ -1,5 +1,6 @@
 import {
   ConflictException,
+  Inject,
   Injectable,
   NotFoundException,
 } from '@nestjs/common';
@@ -14,6 +15,9 @@ import {
   SortParam,
 } from '@app/utils/query-param.util';
 import { Role } from './role.entity';
+import { CACHE_MANAGER } from '@nestjs/cache-manager';
+import { Cache } from 'cache-manager';
+import { CACHE_PREFIX_USER } from '@app/constants';
 
 @Injectable()
 export class UserService {
@@ -22,6 +26,7 @@ export class UserService {
     private readonly userRepository: Repository<User>,
     @InjectRepository(Role)
     private readonly roleRepository: Repository<Role>,
+    @Inject(CACHE_MANAGER) private cacheManager: Cache,
   ) {}
 
   async create(signupDto: SignupDto) {
@@ -135,6 +140,8 @@ export class UserService {
             ...partialEntity,
             id,
           };
+
+    await this.cacheManager.del(CACHE_PREFIX_USER + id);
 
     return await this.userRepository.save(updateDto);
   }
