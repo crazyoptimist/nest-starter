@@ -149,4 +149,16 @@ export class UserService {
   async delete(id: number) {
     return await this.userRepository.delete(id);
   }
+
+  async updateRefreshToken(id: number, refreshToken: string) {
+    return await this.userRepository.update(id, {
+      refreshToken,
+    });
+  }
+
+  async deleteRefreshToken(id: number) {
+    return await this.userRepository.manager.connection
+      .query(`UPDATE users SET refresh_token = NULL WHERE id = $1`, [id])
+      .catch((e) => console.log(e));
+  }
 }

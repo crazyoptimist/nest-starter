@@ -6,6 +6,7 @@ import { SignupDto } from './dto/signup.dto';
 import { UserService } from '@modules/user/user.service';
 import { IRequest } from '@modules/user/user.interface';
 import { NoAuth } from '@modules/common/decorator/no-auth.decorator';
+import { TokenRefreshDto } from './dto/token-refresh.dto';
 
 @Controller('api/auth')
 @ApiTags('authentication')
@@ -22,7 +23,7 @@ export class AuthController {
   @ApiResponse({ status: 401, description: 'Unauthorized' })
   async login(@Body() dto: LoginDto): Promise<any> {
     const user = await this.authService.validateUser(dto);
-    return this.authService.createToken(user);
+    return this.authService.createTokenPair(user);
   }
 
   @Post('signup')
@@ -32,7 +33,24 @@ export class AuthController {
   @ApiResponse({ status: 401, description: 'Unauthorized' })
   async signup(@Body() signupDto: SignupDto): Promise<any> {
     const user = await this.userService.create(signupDto);
-    return this.authService.createToken(user);
+    return this.authService.createTokenPair(user);
+  }
+
+  @Post('refresh')
+  @NoAuth()
+  @ApiResponse({ status: 201, description: 'Successful Token Refresh' })
+  @ApiResponse({ status: 400, description: 'Bad Request' })
+  @ApiResponse({ status: 401, description: 'Unauthorized' })
+  async refresh(@Body() dto: TokenRefreshDto): Promise<any> {
+    const user = await this.authService.validateRefreshToken(dto);
+    return this.authService.createTokenPair(user);
+  }
+
+  @Post('logout')
+  @ApiResponse({ status: 201, description: 'Successful Logout' })
+  @ApiResponse({ status: 401, description: 'Unauthorized' })
+  async logout(@Request() request: IRequest): Promise<any> {
+    return await this.userService.deleteRefreshToken(request.user?.id);
   }
 
   @Get('me')
