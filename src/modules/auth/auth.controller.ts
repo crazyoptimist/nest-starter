@@ -1,7 +1,7 @@
 import { Controller, Body, Post, Get, Request } from '@nestjs/common';
 import { ApiResponse, ApiTags, ApiBearerAuth } from '@nestjs/swagger';
 import { AuthService } from './auth.service';
-import { SigninDto } from './dto/signin.dto';
+import { LoginDto } from './dto/login.dto';
 import { SignupDto } from './dto/signup.dto';
 import { UserService } from '@modules/user/user.service';
 import { IRequest } from '@modules/user/user.interface';
@@ -20,8 +20,8 @@ export class AuthController {
   @ApiResponse({ status: 201, description: 'Successful Login' })
   @ApiResponse({ status: 400, description: 'Bad Request' })
   @ApiResponse({ status: 401, description: 'Unauthorized' })
-  async login(@Body() signinDto: SigninDto): Promise<any> {
-    const user = await this.authService.validateUser(signinDto);
+  async login(@Body() dto: LoginDto): Promise<any> {
+    const user = await this.authService.validateUser(dto);
     return this.authService.createToken(user);
   }
 
