@@ -61,10 +61,7 @@ export class AuthService {
 
     const user = await this.userService.findOne(sub);
 
-    const isMatchedRefreshToken = Hash.compare(
-      dto.refreshToken,
-      user.refreshToken,
-    );
+    const isMatchedRefreshToken = dto.refreshToken === user.refreshToken;
     if (!isMatchedRefreshToken) {
       throw new UnauthorizedException('Invalid refresh token');
     }

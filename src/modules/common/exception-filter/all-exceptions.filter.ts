@@ -50,7 +50,7 @@ export class AllExceptionsFilter implements ExceptionFilter {
         error: 'Record Not Found Error',
       };
     } else {
-      this.logger.error(exception);
+      this.logger.error((exception as Error).stack);
       statusCode = HttpStatus.INTERNAL_SERVER_ERROR;
       responseBody = {
         statusCode,

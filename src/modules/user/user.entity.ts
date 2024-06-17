@@ -46,8 +46,6 @@ export class User {
 
   @Column({
     name: 'refresh_token',
-    length: 255,
-    transformer: new PasswordTransformer(),
     nullable: true,
   })
   @Exclude()
