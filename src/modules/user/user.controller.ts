@@ -28,14 +28,14 @@ import { Action } from '../infrastructure/casl/action.enum';
 import { User } from './user.entity';
 
 @Controller('api/users')
+@UseGuards(PoliciesGuard)
 @ApiTags('users')
+@ApiBearerAuth()
 export class UserController {
   constructor(private readonly userService: UserService) {}
 
   @Post()
-  @UseGuards(PoliciesGuard)
   @CheckPolicies((ability) => ability.can(Action.Create, User))
-  @ApiBearerAuth()
   @ApiResponse({ status: 201, description: 'New User Created' })
   @ApiResponse({ status: 400, description: 'Bad Request' })
   @ApiResponse({ status: 401, description: 'Unauthorized' })
@@ -44,9 +44,7 @@ export class UserController {
   }
 
   @Get()
-  @UseGuards(PoliciesGuard)
   @CheckPolicies((ability) => ability.can(Action.Read, User))
-  @ApiBearerAuth()
   @ApiResponse({ status: 200, description: 'All Users' })
   @ApiResponse({ status: 401, description: 'Unauthorized' })
   async findAll(
@@ -69,9 +67,7 @@ export class UserController {
   }
 
   @Get(':id')
-  @UseGuards(PoliciesGuard)
   @CheckPolicies((ability) => ability.can(Action.Read, User))
-  @ApiBearerAuth()
   @ApiResponse({ status: 200, description: 'User For Given ID' })
   @ApiResponse({ status: 401, description: 'Unauthorized' })
   @ApiResponse({ status: 404, description: 'Not Found' })
@@ -80,9 +76,7 @@ export class UserController {
   }
 
   @Patch(':id')
-  @UseGuards(PoliciesGuard)
   @CheckPolicies((ability) => ability.can(Action.Update, User))
-  @ApiBearerAuth()
   @ApiResponse({ status: 200, description: 'Successful Update' })
   @ApiResponse({ status: 400, description: 'Bad Request' })
   @ApiResponse({ status: 401, description: 'Unauthorized' })
@@ -95,9 +89,7 @@ export class UserController {
   }
 
   @Delete(':id')
-  @UseGuards(PoliciesGuard)
   @CheckPolicies((ability) => ability.can(Action.Delete, User))
-  @ApiBearerAuth()
   @ApiResponse({ status: 200, description: 'Successful Delete' })
   @ApiResponse({ status: 400, description: 'Bad Request' })
   @ApiResponse({ status: 401, description: 'Unauthorized' })

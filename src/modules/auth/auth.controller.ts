@@ -47,6 +47,7 @@ export class AuthController {
   }
 
   @Post('logout')
+  @ApiBearerAuth()
   @ApiResponse({ status: 201, description: 'Successful Logout' })
   @ApiResponse({ status: 401, description: 'Unauthorized' })
   async logout(@Request() request: IRequest): Promise<any> {

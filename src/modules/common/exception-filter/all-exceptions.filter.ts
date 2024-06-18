@@ -36,11 +36,24 @@ export class AllExceptionsFilter implements ExceptionFilter {
       statusCode = exception.getStatus();
       responseBody = exception.getResponse() as ResponseBody;
     } else if (exception instanceof QueryFailedError) {
-      statusCode = HttpStatus.BAD_REQUEST;
+      this.logger.error((exception as Error).stack);
+
+      const isDuplicateKeyError = exception.message?.includes(
+        'duplicate key value violates unique constraint',
+      );
+
+      statusCode = isDuplicateKeyError
+        ? HttpStatus.BAD_REQUEST
+        : HttpStatus.INTERNAL_SERVER_ERROR;
+
+      const message = isDuplicateKeyError
+        ? exception.message
+        : 'Service Unavailable';
+
       responseBody = {
         statusCode,
-        message: exception.message,
-        error: 'Database Query Failed Error',
+        message,
+        error: 'Query Failed Error',
       };
     } else if (exception instanceof EntityNotFoundError) {
       statusCode = HttpStatus.NOT_FOUND;
@@ -51,10 +64,11 @@ export class AllExceptionsFilter implements ExceptionFilter {
       };
     } else {
       this.logger.error((exception as Error).stack);
+
       statusCode = HttpStatus.INTERNAL_SERVER_ERROR;
       responseBody = {
         statusCode,
-        message: (exception as Error).message,
+        message: 'Service Unavailable',
         error: 'Internal Server Error',
       };
     }
