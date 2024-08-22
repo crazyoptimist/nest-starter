@@ -83,7 +83,7 @@ export class UserService {
       }
     }
 
-    query = query.offset(paginationParam.offset).limit(paginationParam.limit);
+    query = query.skip(paginationParam.offset).take(paginationParam.limit);
 
     const users = await query.getMany();
 
