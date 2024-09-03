@@ -76,10 +76,10 @@ export class UserService {
         query.addOrderBy('email', sortParam.order);
       }
       if (sortParam.fieldName === 'firstName') {
-        query.addOrderBy('first_name', sortParam.order);
+        query.addOrderBy('firstName', sortParam.order);
       }
       if (sortParam.fieldName === 'lastName') {
-        query.addOrderBy('last_name', sortParam.order);
+        query.addOrderBy('lastName', sortParam.order);
       }
     }
 
